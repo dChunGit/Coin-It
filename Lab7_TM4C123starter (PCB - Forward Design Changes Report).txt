@@ -6,86 +6,17 @@ Report Written:     Wednesday, March 21, 2018
 Design Path:        C:\Users\dwsch\code\Embedded\Help\EE445L_Lab7\Lab7_TM4C123starter.pcb
 Design Title:       
 Created:            1/29/2013 12:01:41 AM
-Last Saved:         3/20/2018 2:07:34 PM
-Editing Time:       921 min
+Last Saved:         3/21/2018 11:49:41 AM
+Editing Time:       953 min
 Units:              mil (precision 0)
 
-Disconnected pin "U3.19" from net "N0698".
-Disconnected pin "U3.38" from net "N0698".
-Disconnected pin "U3.34" from net "N0698".
-Disconnected pin "MK1.8" from net "N0698".
-Disconnected pin "MK1.9" from net "N0698".
-Disconnected pin "MK1.11" from net "N0698".
-Disconnected pin "MK1.12" from net "N0698".
-Disconnected pin "MK1.13" from net "N0698".
-Disconnected pin "R1.1" from net "N0698".
-Disconnected pin "R2.1" from net "N0698".
-Disconnected pin "R4.1" from net "N0698".
-Disconnected pin "C3.4" from net "N0698".
+Disconnected pin "J3.9" from net "N0708".
+Disconnected pin "J3.10" from net "N0707".
+Disconnected pin "J3.11" from net "N0702".
 
-Deleted net "N0698".
-
-Added net "PowerLEE".
-Added net "+3.4".
-Added net "Gne".
-Added net "PowerLEF".
-Added net "N0705".
-Added net "N0707".
-Added net "N0708".
-
-Added component reference "R5" of component "0.125Wresistor", package "DIL".
-Changed value "V" on component reference "R5" to "470".
-Added component reference "D2" of component "LEDT1.75", package "SIP".
-Added component reference "R6" of component "0.125Wresistor", package "DIL".
-Changed value "V" on component reference "R6" to "470".
-Added component reference "D3" of component "LEDT1.75", package "SIP".
-Added component reference "SW3" of component "B3F-1050", package "DIP".
-Added value "Manufacturer=" to component reference "SW3".
-
-Added value "Manufacturer Part Number=" to component reference "SW3".
-
-Added value "Distributor=" to component reference "SW3".
-
-Added value "Distributor Part Number=" to component reference "SW3".
-
-Added component reference "SW6" of component "B3F-1050", package "DIP".
-Added value "Manufacturer=" to component reference "SW6".
-
-Added value "Manufacturer Part Number=" to component reference "SW6".
-
-Added value "Distributor=" to component reference "SW6".
-
-Added value "Distributor Part Number=" to component reference "SW6".
-
-
-Connected pin "U3.38" to net "Gne".
-Connected pin "U3.19" to net "Gne".
-Connected pin "U3.34" to net "Gne".
-Connected pin "U3.6" to net "+3.4".
-Connected pin "U3.5" to net "N0705".
-Connected pin "U3.29" to net "N0707".
-Connected pin "U3.28" to net "N0708".
-Connected pin "MK1.8" to net "Gne".
-Connected pin "MK1.9" to net "Gne".
-Connected pin "MK1.11" to net "Gne".
-Connected pin "MK1.12" to net "Gne".
-Connected pin "MK1.13" to net "Gne".
-Connected pin "R1.1" to net "Gne".
-Connected pin "R2.1" to net "Gne".
-Connected pin "R4.1" to net "Gne".
-Connected pin "C3.4" to net "Gne".
-Connected pin "R5.1" to net "+3.4".
-Connected pin "R5.2" to net "PowerLEE".
-Connected pin "D2.2" to net "PowerLEE".
-Connected pin "D2.1" to net "Gne".
-Connected pin "R6.1" to net "N0705".
-Connected pin "R6.2" to net "PowerLEF".
-Connected pin "D3.2" to net "PowerLEF".
-Connected pin "D3.1" to net "Gne".
-Connected pin "SW3.1" to net "N0708".
-Connected pin "SW3.4" to net "Gne".
-Connected pin "SW6.1" to net "N0707".
-Connected pin "SW6.4" to net "Gne".
+Connected pin "J3.16" to net "N0708".
+Connected pin "J3.15" to net "N0707".
+Connected pin "J3.9" to net "N0702".
 
 
 End Of Report.
