@@ -1,0 +1,18 @@
+Design Consistency Status Report
+--------------------------------
+
+Report File:        C:\Users\dwsch\code\Embedded\Help\EE445L_Lab7\Lab7_TM4C123starter (PCB - Design Consistency Status Report).txt
+Report Written:     Wednesday, March 21, 2018
+Design Path:        C:\Users\dwsch\code\Embedded\Help\EE445L_Lab7\Lab7_TM4C123starter.pcb
+Design Title:       
+Created:            1/29/2013 12:01:41 AM
+Last Saved:         3/20/2018 2:07:34 PM
+Editing Time:       921 min
+Units:              mil (precision 0)
+
+
+Checking integrity of Schematic "C:\Users\dwsch\code\Embedded\Help\EE445L_Lab7\Lab7_TM4C123starter.sch" with PCB "C:\Users\dwsch\code\Embedded\Help\EE445L_Lab7\Lab7_TM4C123starter.pcb"
+========================================================================================================================================================================================
+
+
+End Of Report.
