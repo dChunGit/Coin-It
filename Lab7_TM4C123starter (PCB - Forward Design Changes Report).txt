@@ -6,17 +6,21 @@ Report Written:     Wednesday, March 21, 2018
 Design Path:        C:\Users\dwsch\code\Embedded\Help\EE445L_Lab7\Lab7_TM4C123starter.pcb
 Design Title:       
 Created:            1/29/2013 12:01:41 AM
-Last Saved:         3/21/2018 11:49:41 AM
+Last Saved:         3/21/2018 11:51:00 AM
 Editing Time:       953 min
 Units:              mil (precision 0)
 
-Disconnected pin "J3.9" from net "N0708".
-Disconnected pin "J3.10" from net "N0707".
-Disconnected pin "J3.11" from net "N0702".
-
-Connected pin "J3.16" to net "N0708".
-Connected pin "J3.15" to net "N0707".
-Connected pin "J3.9" to net "N0702".
+Net N0676 renamed to PA7
+Net N0677 renamed to PA6
+Net N0678 renamed to PA3
+Net N0679 renamed to PA2
+Net N0680 renamed to PA5
+Net N0694 renamed to PC6
+Net N0702 renamed to PD7
+Net N0704 renamed to PD6
+Net +3.4 renamed to PE5
+Net N0707 renamed to PE3
+Net N0708 renamed to PE2
 
 
 End Of Report.
