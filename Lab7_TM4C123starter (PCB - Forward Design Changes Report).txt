@@ -2,15 +2,23 @@ Forward Design Changes Report
 -----------------------------
 
 Report File:        C:\Users\dwsch\code\Embedded\Help\EE445L_Lab7\Lab7_TM4C123starter (PCB - Forward Design Changes Report).txt
-Report Written:     Friday, March 23, 2018
+Report Written:     Monday, March 26, 2018
 Design Path:        C:\Users\dwsch\code\Embedded\Help\EE445L_Lab7\Lab7_TM4C123starter.pcb
 Design Title:       
 Created:            1/29/2013 12:01:41 AM
-Last Saved:         3/23/2018 9:30:40 PM
-Editing Time:       970 min
+Last Saved:         3/26/2018 10:28:56 AM
+Editing Time:       1017 min
 Units:              mil (precision 0)
 
-The designs are the same, so no design changes to forward.
+Disconnected pin "MK1.9" from net "GND".
+Disconnected pin "MK1.11" from net "PB3".
+Disconnected pin "MK1.12" from net "PB2".
+Disconnected pin "MK1.15" from net "N0735".
+
+Connected pin "MK1.16" to net "GND".
+Connected pin "MK1.14" to net "PB3".
+Connected pin "MK1.13" to net "PB2".
+Connected pin "MK1.10" to net "N0735".
 
 
 End Of Report.
