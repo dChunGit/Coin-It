@@ -1,0 +1,63 @@
+Unconnected Pins Report
+-----------------------
+
+Report File:        C:\Keil\EE445L\EE445L_Lab11\Lab7_TM4C123starter (PCB - Unconnected Pins Report).txt
+Report Written:     Tuesday, March 27, 2018
+Design Path:        C:\Keil\EE445L\EE445L_Lab11\Lab7_TM4C123starter.pcb
+Design Title:       
+Created:            1/29/2013 12:01:41 AM
+Last Saved:         3/27/2018 4:05:00 AM
+Editing Time:       1261 min
+Units:              mil (precision 0)
+
+Component J3 Pin J3.10 (Chan6)
+Component J3 Pin J3.11 (Chan5)
+Component J3 Pin J3.14 (Chan2)
+Component J4 Pin J4.5 (CARD_CS)
+Component J4 Pin J4.9 (MISO)
+Component J5 Pin J5.4 (Id)
+Component J5 Pin J5.3 (D+)
+Component J5 Pin J5.2 (D-)
+Component J5 Pin J5.6 (m1)
+Component J5 Pin J5.7 (m2)
+Component J5 Pin J5.8 (m3)
+Component J5 Pin J5.9 (m4)
+Component U3 Pin U3.21 (5V)
+Component U3 Pin U3.2 (PB5)
+Component U3 Pin U3.3 (PB0)
+Component U3 Pin U3.23 (PD0)
+Component U3 Pin U3.4 (PB1)
+Component U3 Pin U3.24 (PD1)
+Component U3 Pin U3.5 (PE4)
+Component U3 Pin U3.25 (PD2)
+Component U3 Pin U3.26 (PD3)
+Component U3 Pin U3.7 (PB4)
+Component U3 Pin U3.27 (PE1)
+Component U3 Pin U3.30 (PF1)
+Component U3 Pin U3.40 (PF2)
+Component U3 Pin U3.39 (PF3)
+Component U3 Pin U3.18 (PE0)
+Component U3 Pin U3.37 (PC4)
+Component U3 Pin U3.17 (PF0)
+Component U3 Pin U3.34 (PC7)
+Component U3 Pin U3.15 (PB7)
+Component U3 Pin U3.14 (PB6)
+Component U3 Pin U3.13 (PA4)
+Component U3 Pin U3.31 (PF4)
+Component MK1 Pin MK1.1
+Component MK1 Pin MK1.3
+Component MK1 Pin MK1.4
+Component MK1 Pin MK1.5
+Component MK1 Pin MK1.6
+Component MK1 Pin MK1.9
+Component MK1 Pin MK1.11
+Component MK1 Pin MK1.12
+Component MK1 Pin MK1.15
+Component SW3 Pin SW3.2
+Component SW3 Pin SW3.3
+Component SW6 Pin SW6.2
+Component SW6 Pin SW6.3
+
+Unconnected pins found : 47
+
+End Of Report.

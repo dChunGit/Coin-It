@@ -1,0 +1,14 @@
+Dangling Connections Report
+---------------------------
+
+Report File:        C:\Keil\EE445L\EE445L_Lab11\Lab7_TM4C123starter (PCB - Dangling Connections Report).txt
+Report Written:     Tuesday, March 27, 2018
+Design Path:        C:\Keil\EE445L\EE445L_Lab11\Lab7_TM4C123starter.pcb
+Design Title:       
+Created:            1/29/2013 12:01:41 AM
+Last Saved:         3/27/2018 4:05:00 AM
+Editing Time:       1261 min
+Units:              mil (precision 0)
+
+
+End Of Report.

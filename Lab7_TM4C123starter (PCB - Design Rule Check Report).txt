@@ -1,0 +1,22 @@
+Design Rule Check Report
+------------------------
+
+Report File:        C:\Keil\EE445L\EE445L_Lab11\Lab7_TM4C123starter (PCB - Design Rule Check Report).txt
+Report Written:     Tuesday, March 27, 2018
+Design Path:        C:\Keil\EE445L\EE445L_Lab11\Lab7_TM4C123starter.pcb
+Design Title:       
+Created:            1/29/2013 12:01:41 AM
+Last Saved:         3/27/2018 4:05:00 AM
+Editing Time:       1261 min
+Units:              mil (precision 0)
+
+
+Error Markers currently in design
+=================================
+
+Number of errors found : 1
+
+Single pin net N0765 on C4.2 at 10000,9113
+
+
+End Of Report.
