@@ -1,41 +1,21 @@
 Design Rule Check Report
 ------------------------
 
-Report File:        C:\Keil\EE445L\EE445L_Lab11\Lab7_TM4C123starter (PCB - Design Rule Check Report).txt
+Report File:        C:\Users\dwsch\code\Embedded\Help\EE445L_Lab7\Lab7_TM4C123starter (PCB - Design Rule Check Report).txt
 Report Written:     Wednesday, March 28, 2018
-Design Path:        C:\Keil\EE445L\EE445L_Lab11\Lab7_TM4C123starter.pcb
+Design Path:        C:\Users\dwsch\code\Embedded\Help\EE445L_Lab7\Lab7_TM4C123starter.pcb
 Design Title:       
 Created:            1/29/2013 12:01:41 AM
-Last Saved:         3/28/2018 3:57:24 PM
-Editing Time:       1440 min
+Last Saved:         3/28/2018 6:01:48 PM
+Editing Time:       1482 min
 Units:              mil (precision 0)
 
 
 Results
 =======
 
-Gap in Net "+3.3" between (10225,10700) and (10325,10700) 
-    +3.3.
-Gap in Net "+3.3" between (11338,10800) and (11300,10625) 
-    +3.3.
-Gap in Net "12V" between (9963,9113) and (9963,9213) 
-    12V.
-Gap in Net "12V" between (9963,9213) and (10175,9263) 
-    12V.
-Gap in Net "PD6" between (10950,9338) and (10613,8800) 
-    PD6.
-Gap in Net "PD6" between (10613,8800) and (10238,8738) 
-    PD6.
-Gap in Net "PD6" between (10238,8738) and (9988,8738) 
-    PD6.
-Gap in Net "PD6" between (10238,8738) and (10175,9463) 
-    PD6.
-Gap in Net "PD7" between (10250,8938) and (10000,8938) 
-    PD7.
-Gap in Net "PD7" between (10250,8938) and (10175,9363) 
-    PD7.
 
-Number of errors found : 10
+No errors found
 
 
 Settings
