@@ -1,0 +1,3 @@
+Put in music array
+Put in instrument structs
+Init and start in main loop

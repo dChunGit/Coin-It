@@ -1,16 +1,21 @@
 Forward Design Changes Report
 -----------------------------
 
-Report File:        C:\Keil\EE445L\EE445L_Lab11\Lab7_TM4C123starter (PCB - Forward Design Changes Report).txt
-Report Written:     Tuesday, March 27, 2018
-Design Path:        C:\Keil\EE445L\EE445L_Lab11\Lab7_TM4C123starter.pcb
+Report File:        C:\Users\dwsch\code\Embedded\Help\EE445L_Lab7\Lab7_TM4C123starter (PCB - Forward Design Changes Report).txt
+Report Written:     Wednesday, March 28, 2018
+Design Path:        C:\Users\dwsch\code\Embedded\Help\EE445L_Lab7\Lab7_TM4C123starter.pcb
 Design Title:       
 Created:            1/29/2013 12:01:41 AM
-Last Saved:         3/27/2018 4:02:15 AM
-Editing Time:       1258 min
+Last Saved:         3/27/2018 2:23:00 PM
+Editing Time:       1403 min
 Units:              mil (precision 0)
 
-The designs are the same, so no design changes to forward.
+Added component reference "J2" of component "Header2", package "SIP".
+
+Connected pin "J2.1" to net "12V".
+Connected pin "J2.2" to net "GND".
+
+Net N0768 renamed to N0771
 
 
 End Of Report.

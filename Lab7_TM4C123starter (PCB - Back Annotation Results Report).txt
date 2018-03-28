@@ -1,0 +1,23 @@
+Back Annotation Results Report
+------------------------------
+
+Report File:        C:\Users\dwsch\code\Embedded\Help\EE445L_Lab7\Lab7_TM4C123starter (PCB - Back Annotation Results Report).txt
+Report Written:     Tuesday, March 27, 2018
+Design Path:        C:\Users\dwsch\code\Embedded\Help\EE445L_Lab7\Lab7_TM4C123starter.pcb
+Design Title:       
+Created:            1/29/2013 12:01:41 AM
+Last Saved:         3/27/2018 12:57:48 PM
+Editing Time:       1319 min
+Units:              mil (precision 0)
+
+Back Annotate renames from PCB "C:\Users\dwsch\code\Embedded\Help\EE445L_Lab7\Lab7_TM4C123starter.pcb" to Schematic "C:\Users\dwsch\code\Embedded\Help\EE445L_Lab7\Lab7_TM4C123starter.sch".
+
+Renamed Component from "TP5" to "CSP".
+Renamed Component from "TP6" to "CSC".
+Renamed Component from "TP3" to "GPO".
+Renamed Component from "TP4" to "RF".
+Renamed Component from "SW1" to "RST".
+Renamed Component from "C3" to "CS".
+
+
+End Of Report.
