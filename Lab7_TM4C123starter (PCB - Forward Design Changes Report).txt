@@ -1,21 +1,28 @@
 Forward Design Changes Report
 -----------------------------
 
-Report File:        C:\Users\dwsch\code\Embedded\Help\EE445L_Lab7\Lab7_TM4C123starter (PCB - Forward Design Changes Report).txt
+Report File:        C:\Keil\EE445L\EE445L_Lab11\Lab7_TM4C123starter (PCB - Forward Design Changes Report).txt
 Report Written:     Wednesday, March 28, 2018
-Design Path:        C:\Users\dwsch\code\Embedded\Help\EE445L_Lab7\Lab7_TM4C123starter.pcb
+Design Path:        C:\Keil\EE445L\EE445L_Lab11\Lab7_TM4C123starter.pcb
 Design Title:       
 Created:            1/29/2013 12:01:41 AM
-Last Saved:         3/27/2018 2:23:00 PM
-Editing Time:       1403 min
+Last Saved:         3/28/2018 4:01:44 PM
+Editing Time:       1448 min
 Units:              mil (precision 0)
 
-Added component reference "J2" of component "Header2", package "SIP".
+Added net "PB6".
+Added net "PB5".
 
-Connected pin "J2.1" to net "12V".
-Connected pin "J2.2" to net "GND".
+Added component reference "PB7" of component "Header1", package "SIP".
+Added component reference "PB6" of component "Header1", package "SIP".
+Added component reference "PB5" of component "Header1", package "SIP".
 
-Net N0768 renamed to N0771
+Connected pin "U3.15" to net "PB7".
+Connected pin "U3.14" to net "PB6".
+Connected pin "U3.2" to net "PB5".
+Connected pin "PB7.1" to net "PB7".
+Connected pin "PB6.1" to net "PB6".
+Connected pin "PB5.1" to net "PB5".
 
 
 End Of Report.
