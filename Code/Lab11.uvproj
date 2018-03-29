@@ -7,7 +7,7 @@
 
   <Targets>
     <Target>
-      <TargetName>Lab5</TargetName>
+      <TargetName>Lab11</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
       <TargetOption>
@@ -45,7 +45,7 @@
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
           <OutputDirectory>.\</OutputDirectory>
-          <OutputName>Lab5</OutputName>
+          <OutputName>Lab11</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>0</CreateHexFile>
@@ -411,24 +411,9 @@
               <FilePath>.\startup.s</FilePath>
             </File>
             <File>
-              <FileName>Timer0A.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Timer0A.c</FilePath>
-            </File>
-            <File>
               <FileName>PLL.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\PLL.c</FilePath>
-            </File>
-            <File>
-              <FileName>SysTick.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\SysTick.c</FilePath>
-            </File>
-            <File>
-              <FileName>Dac.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Dac.c</FilePath>
             </File>
             <File>
               <FileName>Switch.c</FileName>
@@ -441,14 +426,29 @@
               <FilePath>.\Main.c</FilePath>
             </File>
             <File>
-              <FileName>Music.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Music.c</FilePath>
-            </File>
-            <File>
               <FileName>Timer1.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Timer1.c</FilePath>
+            </File>
+            <File>
+              <FileName>Coin.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Coin.c</FilePath>
+            </File>
+            <File>
+              <FileName>NFC.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\NFC.c</FilePath>
+            </File>
+            <File>
+              <FileName>LCD.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\LCD.c</FilePath>
+            </File>
+            <File>
+              <FileName>ST7735.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\ST7735.c</FilePath>
             </File>
           </Files>
         </Group>
