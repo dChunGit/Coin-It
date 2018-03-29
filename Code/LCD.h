@@ -5,5 +5,12 @@
  * Lab 11
  */
 
+/*
+* Function draws the UI
+*/
 void drawScreen(int state);
+
+/*
+* Function updates the display with the new amount inserted into the coin selector
+*/
 void updateAmount(int amount);
