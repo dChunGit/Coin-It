@@ -16,8 +16,7 @@
 #include "Timer1.h"
 #define NVIC_EN0_INT4           0x00000010  // Interrupt 4 enable
 
-void (*PeriodicTask)(int i);   // user function
-
+void (*InputTask)(int i);   // user function
 
 void Buttons_Arm(void) {
 	GPIO_PORTE_ICR_R = 0x07;    // clear flag6-4
@@ -28,7 +27,7 @@ void Buttons_Arm(void) {
 }
 
 void Buttons_Init(void(*task)(int i)) {
-  PeriodicTask = task;          // user function	unsigned long volatile delay;
+  InputTask = task;          // user function	unsigned long volatile delay;
 	SYSCTL_RCGCGPIO_R |= 0x10;
 	GPIO_PORTE_DIR_R &= ~0x07;
 	GPIO_PORTE_DEN_R |= 0x07; 
@@ -55,6 +54,6 @@ void GPIOPortE_Handler(void){
 		rVal = 2;
   }
 	
-	(*PeriodicTask)(rVal);
+	(*InputTask)(rVal);
 	Timer1_Init();
 }
