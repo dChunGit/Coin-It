@@ -18,7 +18,6 @@
 
 void (*InputTask)(int i);   // user function
 
-
 void Buttons_Arm(void) {
 	GPIO_PORTE_ICR_R = 0x07;    // clear flag6-4
   GPIO_PORTE_IM_R |= 0x07;    // enable interrupt on PE6-4

@@ -3,10 +3,5 @@
 
 # But not these files...
 !.gitignore
-!/*.pdf
-!/*.uvproj
-!/*.uvopt
-!/*.c
-!/*.h
-!/*.s
-!/*.png
+!/*.txt
+!/*.xls

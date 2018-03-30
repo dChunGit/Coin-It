@@ -45,4 +45,5 @@ int main(void){
 		//wait for button press from Switch
 		//update screen accordingly
 	}
+
 }
