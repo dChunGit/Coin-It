@@ -198,10 +198,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>64</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>1</TopLine>
+      <CurrentLine>25</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\Switch.c</PathWithFileName>
       <FilenameWithoutPath>Switch.c</FilenameWithoutPath>
@@ -216,8 +216,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1</TopLine>
-      <CurrentLine>8</CurrentLine>
+      <TopLine>50</TopLine>
+      <CurrentLine>65</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\Main.c</PathWithFileName>
       <FilenameWithoutPath>Main.c</FilenameWithoutPath>
@@ -232,8 +232,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>26</TopLine>
+      <CurrentLine>47</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\Timer1.c</PathWithFileName>
       <FilenameWithoutPath>Timer1.c</FilenameWithoutPath>
@@ -246,10 +246,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>19</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1</TopLine>
-      <CurrentLine>15</CurrentLine>
+      <TopLine>53</TopLine>
+      <CurrentLine>75</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\Coin.c</PathWithFileName>
       <FilenameWithoutPath>Coin.c</FilenameWithoutPath>
@@ -278,10 +278,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>27</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1</TopLine>
-      <CurrentLine>19</CurrentLine>
+      <TopLine>27</TopLine>
+      <CurrentLine>38</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\LCD.c</PathWithFileName>
       <FilenameWithoutPath>LCD.c</FilenameWithoutPath>
@@ -292,12 +292,12 @@
       <GroupNumber>1</GroupNumber>
       <FileNumber>9</FileNumber>
       <FileType>1</FileType>
-      <tvExp>0</tvExp>
+      <tvExp>1</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>40</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1</TopLine>
-      <CurrentLine>1</CurrentLine>
+      <TopLine>834</TopLine>
+      <CurrentLine>859</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\ST7735.c</PathWithFileName>
       <FilenameWithoutPath>ST7735.c</FilenameWithoutPath>

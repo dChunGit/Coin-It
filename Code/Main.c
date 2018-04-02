@@ -47,7 +47,7 @@ void Button_Handler(int button){
 }
 
 void Coin_Handler(){
-	
+	sessionAmount++;
 }
 
 int main(void){ 
@@ -65,8 +65,6 @@ int main(void){
 
 	
 	EnableInterrupts();
-	
-	
 	
 	while(1) {
 		//wait for input from Coin Selector

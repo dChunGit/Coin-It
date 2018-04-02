@@ -22,8 +22,8 @@ void Buttons_Arm(void) {
 	GPIO_PORTE_ICR_R = 0x0C;    // clear flag 3 and 2
   GPIO_PORTE_IM_R |= 0x0C;    // enable interrupt on PE3-2
                               // GPIO PortE=priority 2
-  NVIC_PRI1_R = (NVIC_PRI1_R&0xFFFFFF00)|0x00000040; // bits 5-7 <-- fix this, see book
-  NVIC_EN0_R = NVIC_EN0_INT4; // enable interrupt 4 in NVIC <-- fix this, see book
+  NVIC_PRI1_R = (NVIC_PRI1_R&0xFFFFFF00)|0x00000040; // bits 5-7
+  NVIC_EN0_R = NVIC_EN0_INT4; // enable interrupt 4 in NVIC
 }
 
 void Buttons_Init(void(*task)(int i)) {
