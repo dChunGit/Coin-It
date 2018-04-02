@@ -57,7 +57,16 @@ int main(void){
 	Buttons_Init(Button_Handler);
 	setupCoinSelector(Coin_Handler);
 	setupNFCBoard();
+	
+	// initialize green LED
+	SYSCTL_RCGCGPIO_R |= 0x10;            // activate port E
+	GPIO_PORTE_DIR_R |= 0x20;
+	GPIO_PORTE_DEN_R |= 0x20;
+
+	
 	EnableInterrupts();
+	
+	
 	
 	while(1) {
 		//wait for input from Coin Selector
