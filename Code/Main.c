@@ -50,7 +50,7 @@ uint8_t message[] = {0x03, 0x00, 0xD6, 0x00, 0x02, 0x57, 0xD1, 0x02, 0x52, 0x53,
 uint8_t fileLength[] = {0x02, 0x00, 0xD6, 0x00, 0x00, 0x02, 0x00, 0x57, 0xEE, 0x90};
 uint8_t readLength[] = {0x03, 0x00, 0xB0, 0x00, 0x00, 0x02, 0x40, 0x79};
 //uint8_t readFile[] = {0x02, 0x00, 0xB0, 0x00, 0x02, 0x16, 0x7E, 0x18};
-uint8_t readFile[] = {0x02, 0x00, 0xB0, 0x00, 0x02, 0x57, 0xF3, 0x4B};
+uint8_t readFile[] = {0x02, 0x00, 0xB0, 0x00, 0x02, 0x10, 0x48, 0x7D};
 uint8_t deselect[] = {0xC2, 0xE0, 0xB4};
 
 int command_sizes[] = {1, 12, 10, 10, 10, 95, 10, 8, 8};
@@ -113,11 +113,11 @@ int main(void){
 	sendTransaction(readSystemContent2, 8, 1, 23);*/
 	//sendTransaction(selectCC, command_sizes[2], 1);
 	sendTransaction(selectNDEF, 10, 1, 5);
-	sendTransaction(clearNDEFFileLength, 10, 1, 5);
-	sendTransaction(message, 95, 1, 5);
-	sendTransaction(fileLength, 10, 1, 5);
+	//sendTransaction(clearNDEFFileLength, 10, 1, 5);
+	//sendTransaction(message, 95, 1, 5);
+	//sendTransaction(fileLength, 10, 1, 5);
 	sendTransaction(readLength, 8, 1, 7);
-	sendTransaction(readFile, 8, 1, 95);
+	sendTransaction(readFile, 8, 1, 16);
 	//sendTransaction(deselect, 3, 1);
 	
 	GPIO_PORTF_DATA_R ^= 0x04;  

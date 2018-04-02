@@ -115,12 +115,12 @@
       <TargetDriverDllRegistry>
         <SetRegEntry>
           <Number>0</Number>
-          <Key>DLGDARM</Key>
-          <Name>(1010=-1,-1,-1,-1,0)(1007=-1,-1,-1,-1,0)(1008=-1,-1,-1,-1,0)(1009=-1,-1,-1,-1,0)(1012=-1,-1,-1,-1,0)(9108=-1,-1,-1,-1,0)(9106=-1,-1,-1,-1,0)(9104=-1,-1,-1,-1,0)(9107=-1,-1,-1,-1,0)(9102=-1,-1,-1,-1,0)</Name>
+          <Key>DLGUARM</Key>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
-          <Key>DLGUARM</Key>
+          <Key>DLGDARM</Key>
+          <Name>(1010=-1,-1,-1,-1,0)(1007=-1,-1,-1,-1,0)(1008=-1,-1,-1,-1,0)(1009=-1,-1,-1,-1,0)(1012=-1,-1,-1,-1,0)(9108=-1,-1,-1,-1,0)(9106=-1,-1,-1,-1,0)(9104=-1,-1,-1,-1,0)(9107=-1,-1,-1,-1,0)(9102=-1,-1,-1,-1,0)</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -146,6 +146,22 @@
       <Breakpoint>
         <Bp>
           <Number>0</Number>
+          <Type>0</Type>
+          <LineNumber>120</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>1716</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>.\Main.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression></Expression>
+        </Bp>
+        <Bp>
+          <Number>1</Number>
           <Type>0</Type>
           <LineNumber>104</LineNumber>
           <EnabledFlag>1</EnabledFlag>
@@ -268,10 +284,10 @@
       <FileType>1</FileType>
       <tvExp>1</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>40</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>96</TopLine>
-      <CurrentLine>105</CurrentLine>
+      <TopLine>100</TopLine>
+      <CurrentLine>115</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\Main.c</PathWithFileName>
       <FilenameWithoutPath>Main.c</FilenameWithoutPath>
@@ -316,10 +332,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>5</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>91</TopLine>
-      <CurrentLine>111</CurrentLine>
+      <TopLine>112</TopLine>
+      <CurrentLine>131</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\NFC.c</PathWithFileName>
       <FilenameWithoutPath>NFC.c</FilenameWithoutPath>
