@@ -6,3 +6,4 @@
 .\main.o: NFC.h
 .\main.o: Coin.h
 .\main.o: LCD.h
+.\main.o: SysTick.h

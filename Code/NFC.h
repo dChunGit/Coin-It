@@ -8,7 +8,6 @@ void setupNFCBoard(void);
 */
 void sendTransaction(uint8_t array[], int size, int has_response, int response_length);
 
-/*
-* Function reads in the onboard tag via i2c
-*/
-void readRequest(uint8_t slave_addr, uint8_t num_of_args, ...);
+void sendRelease(void);
+
+void finishRelease(void);
