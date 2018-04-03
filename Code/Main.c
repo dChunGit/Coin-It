@@ -6,6 +6,7 @@
 #include "Coin.h"
 #include "LCD.h"
 #include "SysTick.h"
+#include "ST7735.h"
 
 #define F16HZ (50000000/16)
 #define F20KHZ (50000000/20000)
@@ -39,7 +40,7 @@ uint8_t readSystemContent2[] = {0x02, 0x00, 0xB0, 0x00, 0x00, 0x12, 0xEA, 0x6D};
 
 uint8_t selectCC[] = {0x03, 0x00, 0xA4, 0x00, 0x0C, 0x02, 0xE1, 0x03, 0xD2, 0xAF};
 uint8_t selectNDEF[] = {0x03, 0x00, 0xA4, 0x00, 0x0C, 0x02, 0x00, 0x01, 0x81, 0x7C};
-uint8_t clearNDEFFileLength[] = {0x02, 0x00, 0xA4, 0x00, 0x0C, 0x02, 0x00, 0x01, 0x3E, 0xFD};
+uint8_t clearNDEFFileLength[] = {0x02, 0x00, 0xD6, 0x00, 0x00, 0x02, 0x00, 0x00, 0xD4, 0xB6};
 /*uint8_t message[] = {0x03, 0x00, 0xD6, 0x00, 0x02, 0x57, 0xD1, 0x01, 0x12, 0x54, 0x02, 0x65, 0x6E, 0x4E, 0x46, 0x43, 
 	0x20, 0x44, 0x79, 0x6E, 0x61, 0x6D, 0x69, 0x63, 0x20, 0x54, 0x61, 0x67, 0x21, 0x33};*/
 uint8_t message[] = {0x03, 0x00, 0xD6, 0x00, 0x02, 0x57, 0xD1, 0x02, 0x52, 0x53, 0x70, 0x91, 0x01, 0x0C, 0x55, 0x01, 0x73, 
@@ -76,10 +77,18 @@ int processLength() {
 	return response[2];
 }
 
+void printTag() {
+	for(int a = 0; a < 9; a++) {
+		char printout = response[8+a];
+		int temp = 0;
+		//ST7735_OutChar(response[13+a]);
+	}
+}
+
 int main(void){ 
   PLL_Init(Bus80MHz);              // bus clock at 50 MHz
 	DisableInterrupts();
-	
+	//ST7735_InitR(INITR_REDTAB);
 	SYSCTL_RCGCGPIO_R |= 0x20;            // activate port F
 	
 	GPIO_PORTF_DIR_R |= 0x06;             // make PF2, PF1 out (built-in LED)
@@ -111,8 +120,7 @@ int main(void){
 	//readRequest(0xAC, 8, 0x02, 0x00, 0xB0, 0x00, 0x02, 0x57, 0xF3, 0x4B);*/
 	
 	sendTransaction(killNFC, 1, 0, 0);
-	//sendTransaction(selectNFC, 16, 1, 5);
-	sendRelease();
+	sendTransaction(selectNFC, 16, 1, 5);
 	
 	/*sendTransaction(selectSystem, 10, 1, 5);
 	sendTransaction(readSystemLength, 8, 1, 7);
@@ -124,7 +132,7 @@ int main(void){
 	sendTransaction(readSystemContent2, 8, 1, 23);*/
 	
 	//sendTransaction(selectCC, command_sizes[2], 1);
-	/*sendTransaction(selectNDEF, 10, 1, 5);
+	sendTransaction(selectNDEF, 10, 1, 5);
 	//sendTransaction(clearNDEFFileLength, 10, 1, 5);
 	//sendTransaction(confirmed, 24, 1, 5);
 	//sendTransaction(fileLength, 10, 1, 5);
@@ -132,7 +140,9 @@ int main(void){
 	int length = processLength();
 	//17 for pcb + ndef
 	sendTransaction(readFile, 8, 1, 17);
-	//sendTransaction(deselect, 3, 1);*/
+	//sendTransaction(deselect, 3, 1);
+	sendRelease();
+	printTag();
 	
 	GPIO_PORTF_DATA_R ^= 0x04;  
 	

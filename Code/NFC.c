@@ -116,14 +116,12 @@ void sendRelease() {
 		I2C0_MSA_R |= 0x01;              // MSA[0] is 1 for receive
 		I2C0_MCS_R = (0|I2C_MCS_START|I2C_MCS_RUN);    // only start on first send
 
-		//SYSCTL_RCGCI2C_R &= ~0x0001;           // deactivate I2C0
 		GPIO_PORTB_DATA_R &= ~0x04;
 		SysTick_Enable();
 	
 }
 
 void finishRelease() {
-		//SYSCTL_RCGCI2C_R |= 0x0001;           // activate I2C0
 		I2C0_MCS_R = (0|I2C_MCS_STOP);    // master enable
 		while(I2C0_MCS_R&I2C_MCS_BUSY){};// wait for transmission done
 

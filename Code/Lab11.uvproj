@@ -455,15 +455,10 @@
               <FileType>1</FileType>
               <FilePath>.\CRC.c</FilePath>
             </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>Libraries</GroupName>
-          <Files>
             <File>
-              <FileName>driverlib.lib</FileName>
-              <FileType>4</FileType>
-              <FilePath>.\driverlib.lib</FilePath>
+              <FileName>SysTick.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\SysTick.c</FilePath>
             </File>
           </Files>
         </Group>
