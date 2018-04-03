@@ -42,6 +42,18 @@ void setupCoinSelector(void(*task)(void)) {
 	long sr;
   sr = StartCritical();
   SYSCTL_RCGCTIMER_R |= 0x01;// activate timer0
+	SYSCTL_RCGCGPIO_R |= 0x02; // activate port B
+  while((SYSCTL_PRGPIO_R&0x0002) == 0){};// ready?
+
+  CoinTask = task;             // user function 
+  GPIO_PORTB_DIR_R &= ~0x40;       // make PB6 in
+  GPIO_PORTB_AFSEL_R |= 0x40;      // enable alt funct on PB6
+  GPIO_PORTB_DEN_R |= 0x40;        // enable digital I/O on PB6
+                                   // configure PB6 as T0CCP0
+  GPIO_PORTB_PCTL_R = (GPIO_PORTB_PCTL_R&0xF0FFFFFF)+0x07000000;
+  GPIO_PORTB_AMSEL_R &= ~0x40;     // disable analog functionality on PB6
+	
+	/*
   SYSCTL_RCGCGPIO_R |= 0x08; // activate port D
   while((SYSCTL_PRGPIO_R&0x0008) == 0){};// ready?
 
@@ -52,6 +64,7 @@ void setupCoinSelector(void(*task)(void)) {
                                    // configure PD6 as T0CCP0
   GPIO_PORTD_PCTL_R = (GPIO_PORTD_PCTL_R&0xF0FFFFFF)+0x07000000;
   GPIO_PORTD_AMSEL_R &= ~0x40;     // disable analog functionality on PD6
+	*/
   TIMER0_CTL_R &= ~TIMER_CTL_TAEN; // disable timer0A during setup
   TIMER0_CFG_R = TIMER_CFG_16_BIT; // configure for 16-bit timer mode
                                    // configure for capture mode, default down-count settings

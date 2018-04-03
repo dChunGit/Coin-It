@@ -40,10 +40,16 @@ void drawScreen(int state) {
 		ST7735_OutString(" has been deposited into your account. Thank you for using CoinIt. Don't forget your phone!");
 		
 		int temp = 0;
-		while (temp < 10000) { // wait arbitrary amount of time before returning to home screen
+		int temp2 = 0;
+		while (temp2 < 100) { // wait arbitrary amount of time before returning to home screen
 			temp++;
+			if (temp >= 500000) {
+				temp = 0;
+				temp2++;
+			}
 		}
 		state = 0;
+		drawScreen(state);
 	}
 }
 

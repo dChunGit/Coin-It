@@ -5,6 +5,7 @@
 #include "NFC.h"
 #include "Coin.h"
 #include "LCD.h"
+#include "ST7735.h"
 
 #define F16HZ (50000000/16)
 #define F20KHZ (50000000/20000)
@@ -32,6 +33,8 @@ void Button_Handler(int button){
 						else if (currentState == 2) {
 							currentState = 3;
 						}
+						
+						else currentState = 1;
 							drawScreen(currentState);						
 				} break;
 		case 1: {
@@ -46,8 +49,9 @@ void Button_Handler(int button){
 	}
 }
 
-void Coin_Handler(){
+void Coin_Handler(void){
 	sessionAmount++;
+	drawScreen(currentState);
 }
 
 int main(void){ 
@@ -56,6 +60,7 @@ int main(void){
 
 	Buttons_Init(Button_Handler);
 	setupCoinSelector(Coin_Handler);
+	ST7735_InitR(INITR_REDTAB);
 	setupNFCBoard();
 	
 	// initialize green LED
@@ -65,11 +70,10 @@ int main(void){
 
 	
 	EnableInterrupts();
-	
+	drawScreen(currentState);
 	while(1) {
 		//wait for input from Coin Selector
 		//wait for button press from Switch
 		//update screen accordingly
 	}
-
 }
