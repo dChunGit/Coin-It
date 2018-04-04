@@ -5,6 +5,7 @@
 #include "NFC.h"
 #include "Coin.h"
 #include "LCD.h"
+#include "ST7735.h"
 
 #define F16HZ (50000000/16)
 #define F20KHZ (50000000/20000)
@@ -19,16 +20,38 @@ void EndCritical(long sr);    // restore I bit to previous value
 void WaitForInterrupt(void);  // low power mode
 
 int sessionAmount = 0;
-//state 0: begin transaction, state 1: transaction in progress, state 2: transaction finished
+//state 0: begin transaction, state 1: transaction in progress, state 2: "confirm" pressed, state 3: transaction finished successfully
 int currentState = 0;
 
 void Button_Handler(int button){
+	// button 0: confirm, 1: cancel
 	switch(button) {
+		case 0: {
+						if (currentState == 1) {
+							currentState = 2;
+						}
+						else if (currentState == 2) {
+							currentState = 3;
+						}
+						
+						else currentState = 1;
+							drawScreen(currentState);						
+				} break;
+		case 1: {
+						if (currentState == 2) {
+							currentState = 1;
+							drawScreen(currentState);
+						}
+				} break;
+				default: {
+						//
+				}
 	}
 }
 
-void Coin_Handler() {
-	
+void Coin_Handler(void){
+	sessionAmount++;
+	drawScreen(currentState);
 }
 
 int main(void){ 
@@ -37,13 +60,20 @@ int main(void){
 
 	Buttons_Init(Button_Handler);
 	setupCoinSelector(Coin_Handler);
+	ST7735_InitR(INITR_REDTAB);
 	setupNFCBoard();
-	EnableInterrupts();
 	
+	// initialize green LED
+	SYSCTL_RCGCGPIO_R |= 0x10;            // activate port E
+	GPIO_PORTE_DIR_R |= 0x20;
+	GPIO_PORTE_DEN_R |= 0x20;
+
+	
+	EnableInterrupts();
+	drawScreen(currentState);
 	while(1) {
 		//wait for input from Coin Selector
 		//wait for button press from Switch
 		//update screen accordingly
 	}
-
 }
