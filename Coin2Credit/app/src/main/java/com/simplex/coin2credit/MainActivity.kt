@@ -130,8 +130,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             val type = intent.type
             if(mimeText == type) {
                 val tag = intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)
-                //NdefReader(this).execute(tag)
-                NdefWriter(this, "Confirmed").execute(tag)
+                NdefReader(this).execute(tag)
+                //NdefWriter(this, "Confirmed").execute(tag)
 
             } else {
                 Log.d("TAG", "Wrong mime: " + type)

@@ -61,16 +61,38 @@ uint8_t deselect[] = {0xC2, 0xE0, 0xB4};
 int command_sizes[] = {1, 12, 10, 10, 10, 95, 10, 8, 8};
 
 int sessionAmount = 0;
-//state 0: begin transaction, state 1: transaction in progress, state 2: transaction finished
+//state 0: begin transaction, state 1: transaction in progress, state 2: "confirm" pressed, state 3: transaction finished successfully
 int currentState = 0;
 
 void Button_Handler(int button){
+	// button 0: confirm, 1: cancel
 	switch(button) {
+		case 0: {
+						if (currentState == 1) {
+							currentState = 2;
+						}
+						else if (currentState == 2) {
+							currentState = 3;
+						}
+						
+						else currentState = 1;
+							drawScreen(currentState);						
+				} break;
+		case 1: {
+						if (currentState == 2) {
+							currentState = 1;
+							drawScreen(currentState);
+						}
+				} break;
+				default: {
+						//
+				}
 	}
 }
 
-void Coin_Handler() {
-	
+void Coin_Handler(void){
+	sessionAmount++;
+	drawScreen(currentState);
 }
 
 int processLength() {
@@ -101,8 +123,8 @@ int main(void){
 	SysTick_Init(80000, finishRelease);
 	Buttons_Init(Button_Handler);
 	setupCoinSelector(Coin_Handler);
+	ST7735_InitR(INITR_REDTAB);
 	setupNFCBoard();
-	EnableInterrupts();
 	
 	GPIO_PORTF_DATA_R ^= 0x04;  
 	
@@ -146,6 +168,14 @@ int main(void){
 	
 	GPIO_PORTF_DATA_R ^= 0x04;  
 	
+	// initialize green LED
+	SYSCTL_RCGCGPIO_R |= 0x10;            // activate port E
+	GPIO_PORTE_DIR_R |= 0x20;
+	GPIO_PORTE_DEN_R |= 0x20;
+
+	
+	EnableInterrupts();
+	drawScreen(currentState);
 	while(1) {
 		//state 0
 		//setup periodic timer to read tag
@@ -156,5 +186,4 @@ int main(void){
 		//state 2
 		//on receive completed message -> transition state
 	}
-
 }

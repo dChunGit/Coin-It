@@ -19,8 +19,8 @@
 void (*InputTask)(int i);   // user function
 
 void Buttons_Arm(void) {
-	GPIO_PORTE_ICR_R = 0x07;    // clear flag6-4
-  GPIO_PORTE_IM_R |= 0x07;    // enable interrupt on PE6-4
+	GPIO_PORTE_ICR_R = 0x0C;    // clear flag 3 and 2
+  GPIO_PORTE_IM_R |= 0x0C;    // enable interrupt on PE3-2
                               // GPIO PortE=priority 2
   NVIC_PRI1_R = (NVIC_PRI1_R&0xFFFFFF00)|0x00000040; // bits 5-7
   NVIC_EN0_R = NVIC_EN0_INT4; // enable interrupt 4 in NVIC
@@ -29,29 +29,25 @@ void Buttons_Arm(void) {
 void Buttons_Init(void(*task)(int i)) {
   InputTask = task;          // user function	unsigned long volatile delay;
 	SYSCTL_RCGCGPIO_R |= 0x10;
-	GPIO_PORTE_DIR_R &= ~0x07;
-	GPIO_PORTE_DEN_R |= 0x07; 
-  GPIO_PORTE_IS_R &= ~0x07;   // PE6-4 is edge-sensitive 
-  GPIO_PORTE_IBE_R &= ~0x07;  // PE6-4 is not both edges 
-  GPIO_PORTE_IEV_R |= 0x07;   // PE6-4 rising edge event
+	GPIO_PORTE_DIR_R &= ~0x0C;
+	GPIO_PORTE_DEN_R |= 0x0C; 
+  GPIO_PORTE_IS_R &= ~0x0C;   // PE3-2 is edge-sensitive 
+  GPIO_PORTE_IBE_R &= ~0x0C;  // PE3-2 is not both edges 
+  GPIO_PORTE_IEV_R |= 0x0C;   // PE3-2 rising edge event
 	Buttons_Arm();
 }
 
 void GPIOPortE_Handler(void){
-	GPIO_PORTE_IM_R &= ~0x07;     // disarm interrupt 
+	GPIO_PORTE_IM_R &= ~0x0C;     // disarm interrupt 
 	int rVal = -1;
 	
-  if(GPIO_PORTE_RIS_R&0x01){  // poll PE0
-    GPIO_PORTE_ICR_R = 0x01;  // acknowledge flag0
-		rVal = 0;
-  }
-  if(GPIO_PORTE_RIS_R&0x02){  // poll PE1
-    GPIO_PORTE_ICR_R = 0x02;  // acknowledge flag1
-		rVal = 1;
-  }
 	if(GPIO_PORTE_RIS_R&0x04){  // poll PE2
     GPIO_PORTE_ICR_R = 0x04;  // acknowledge flag2
-		rVal = 2;
+		rVal = 0;
+  }
+	else if(GPIO_PORTE_RIS_R&0x08){  // poll PE3
+    GPIO_PORTE_ICR_R = 0x04;  // acknowledge flag2
+		rVal = 1;
   }
 	
 	(*InputTask)(rVal);
