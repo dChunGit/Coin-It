@@ -11,6 +11,11 @@
 void drawScreen(int state);
 
 /*
+* Function prints tag value for debugging
+*/
+void printTag(char response_Tag[]);
+
+/*
 * Function updates the display with the new amount inserted into the coin selector
 */
 void updateAmount(int amount);

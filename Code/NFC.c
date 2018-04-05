@@ -8,6 +8,7 @@
 #include <stdarg.h>
 #include "../inc/tm4c123gh6pm.h"
 #include "SysTick.h"
+#include "CRC.h"
 
 #define MAXRETRIES              100           // number of receive attempts before giving up
 
