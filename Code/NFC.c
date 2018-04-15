@@ -60,7 +60,7 @@ void sendTransaction(uint8_t data[], int size, int has_response, int response_le
 	//command reads response
 	if(has_response) {
 		//wait for device ready for receive
-		do {
+		/*do {
 			I2C0_MSA_R = (slave<<1)&0xFE;
 			I2C0_MSA_R &= ~0x01;
 			I2C0_MCS_R = (0|I2C_MCS_STOP|I2C_MCS_START|I2C_MCS_RUN);    // send request waiting for ack
@@ -71,7 +71,13 @@ void sendTransaction(uint8_t data[], int size, int has_response, int response_le
 		
 		//stop communication
 		I2C0_MCS_R = (0|I2C_MCS_STOP);
-		while(I2C0_MCS_R&I2C_MCS_BUSY){};// wait for transmission done
+		while(I2C0_MCS_R&I2C_MCS_BUSY){};// wait for transmission done*/
+		for(int wait = 0; wait < 100; wait++) {
+			for(int temp = 0; temp < 10; temp++) {
+				
+			}
+		}
+		
 
 		//Read receive until no ack
 		int retryCounter = 0;

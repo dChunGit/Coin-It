@@ -8,10 +8,30 @@
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Transaction Completed"
+        android:text="Transaction Completed!"
         android:textSize="24sp"
         android:layout_margin="12dp"
         android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="April 5, 2018"
+        android:textSize="20sp"
+        android:layout_margin="7dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/title" />
+
+    <TextView
+        android:id="@+id/tnum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Transaction: 1032"
+        android:textSize="20sp"
+        android:layout_marginTop="12dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/date" />
 
     <TextView
         android:id="@+id/transfer"
@@ -19,8 +39,8 @@
         android:layout_height="wrap_content"
         android:text="$5.55"
         android:textSize="20sp"
-        android:layout_margin="12dp"
+        android:layout_margin="7dp"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/title"/>
+        android:layout_below="@id/tnum"/>
 
 </RelativeLayout>
