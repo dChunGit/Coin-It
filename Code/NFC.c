@@ -8,12 +8,21 @@
 #include <stdarg.h>
 #include "../inc/tm4c123gh6pm.h"
 #include "SysTick.h"
+#include "NFC.h"
+#include "Main.h"
+#include "CRC.h"
 
 #define MAXRETRIES              100           // number of receive attempts before giving up
 
 char response[50];
 char* pointer = response;
 int response_pointer = 0;
+
+uint8_t ndef[30];
+uint8_t ndef_length[] = {0x02, 0x00, 0xD6, 0x00, 0x00, 0x02, 0x00, 0x10, 0x55, 0xA6};
+
+int valueLength = 0;
+uint8_t confirmcheck[] = "Connected";
 
 int8_t slave = 0x56;
 
@@ -32,7 +41,104 @@ void setupNFCBoard(void) {
   I2C0_MTPR_R = 0x03;              // 8) configure for 1 mbps clock
 }
 
-void sendTransaction(uint8_t data[], int size, int has_response, int response_length) {
+int processLength() {
+	return response[2];
+}
+
+int convertToASCII(int number) {
+	int temp = number;
+	int multiplier = 10;
+	int pointer_value = valueLength;
+	int savep = 1;
+	
+	while(number/multiplier > 0) {
+		multiplier *= 10;
+		pointer_value++;
+		savep++;
+	}
+	
+	valueLength = pointer_value;
+	
+	while(temp > 0 && pointer_value > 0) {
+		int current = temp%10;
+		ndef[pointer_value] = current + '0';
+		pointer_value--;
+		temp /= 10;
+	}
+	
+	return savep;
+}
+
+int isTagConnected() {
+	readTag();
+	
+	for(int a = 0; a < 9; a++) {
+		if(response[8+a] != confirmcheck[a]) {
+			return 0;
+		}
+	}
+	
+	return 1;
+}
+
+void writeStartedTransfer() {
+	//need to change length of started write command
+	ndef_length[7] = started[5];
+	writeTag(started, 24);
+}
+
+void writeValue(int data) {
+	for(valueLength = 0; valueLength < 13; valueLength++) {
+		ndef[valueLength] = header[valueLength];
+	}
+	int length = convertToASCII(data);
+	ndef[8] = length + 3;
+	ndef[5] = ndef[8] + 4;
+	uint16_t crc = M24SR_ComputeCrc(ndef, valueLength);
+	ndef[valueLength] = crc&0xFF;
+	valueLength++;
+	ndef[valueLength] = (crc>>8)&0xFF;
+	valueLength++;
+	//concatenate header, ndef, and crc
+	ndef_length[7] = ndef[5];
+	crc = M24SR_ComputeCrc(ndef_length, 8);
+	ndef_length[8] = crc&0xFF;
+	ndef_length[9] = (crc>>8)&0xFF;
+	int a = 0;
+	writeTag(ndef, valueLength);
+}
+
+void writeTag(uint8_t values[], int length) {
+	sendTransaction(killNFC, 1, 0, 0);
+	sendTransaction(selectNFC, 16, 1, 5);
+	sendTransaction(selectNDEF, 10, 1, 5);
+	sendTransaction(clearNDEFFileLength, 10, 0, 5); //this works -> will clear ndef length
+	//sendTransaction(confirmed, 24, 0, 5); //this works somehow?
+	sendTransaction(values, length, 0, 0);
+	//sendTransaction(fileLength, 10, 0, 5);
+	sendTransaction(fileLength, 10, 0, 5);
+	sendRelease();
+}
+
+void readTag() {
+	int success = 0, count = 0;
+	do {
+		success = sendTransaction(getICSession, 1, 0, 1);
+		count++;
+	} while(success == 0 && count < 10);
+	
+	if(success) {
+		sendTransaction(selectNFC, 16, 1, 5);
+		sendTransaction(selectNDEF, 10, 1, 5);
+		sendTransaction(readLength, 8, 1, 7);
+		int length = processLength();
+		//17 for pcb + ndef
+		sendTransaction(readFile, 8, 1, length+1);
+		sendRelease();
+	}
+}
+
+int sendTransaction(uint8_t data[], int size, int has_response, int response_length) {
 	int errors = 0;
 	
 	for(int a = 0; a < size; a++) {
@@ -56,11 +162,11 @@ void sendTransaction(uint8_t data[], int size, int has_response, int response_le
 	
 	I2C0_MCS_R = (0|I2C_MCS_STOP);
 	while(I2C0_MCS_R&I2C_MCS_BUSY){};// wait for transmission done
-
+	
 	//command reads response
 	if(has_response) {
 		//wait for device ready for receive
-		/*do {
+		do {
 			I2C0_MSA_R = (slave<<1)&0xFE;
 			I2C0_MSA_R &= ~0x01;
 			I2C0_MCS_R = (0|I2C_MCS_STOP|I2C_MCS_START|I2C_MCS_RUN);    // send request waiting for ack
@@ -69,15 +175,11 @@ void sendTransaction(uint8_t data[], int size, int has_response, int response_le
 			//loop until slave sends ack
 		} while((I2C0_MCS_R&(I2C_MCS_DATACK)) != 0);
 		
-		//stop communication
-		I2C0_MCS_R = (0|I2C_MCS_STOP);
-		while(I2C0_MCS_R&I2C_MCS_BUSY){};// wait for transmission done*/
-		for(int wait = 0; wait < 100; wait++) {
+		/*for(int wait = 0; wait < 100; wait++) {
 			for(int temp = 0; temp < 10; temp++) {
 				
 			}
-		}
-		
+		}*/
 
 		//Read receive until no ack
 		int retryCounter = 0;
@@ -104,6 +206,10 @@ void sendTransaction(uint8_t data[], int size, int has_response, int response_le
 
 			} while(((I2C0_MCS_R&(I2C_MCS_ERROR)) != 0) && (retryCounter <= MAXRETRIES));
 			
+			if(retryCounter > MAXRETRIES) {
+				errors++;
+			}
+			
 			first = 0;
 			response_pointer++;
 			received++;
@@ -113,8 +219,15 @@ void sendTransaction(uint8_t data[], int size, int has_response, int response_le
 		//stop communication
 		I2C0_MCS_R = (0|I2C_MCS_STOP);    // master enable
 		while(I2C0_MCS_R&I2C_MCS_BUSY){};// wait for transmission done
+	} else {
+		if(size == 1 && response_length == 1) {
+			if(errors > 0) {
+				return 0;
+			}
+		}
 	}
 	
+	return 1;
 }
 
 void sendRelease() {
