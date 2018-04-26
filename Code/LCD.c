@@ -48,6 +48,7 @@ void drawScreen(int state) {
 				temp2++;
 			}
 		}
+		sessionAmount = 0;
 		state = 0;
 		drawScreen(state);
 	}

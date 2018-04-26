@@ -20,7 +20,8 @@ void EndCritical(long sr);    // restore I bit to previous value
 void WaitForInterrupt(void);  // low power mode
 
 int sessionAmount = 0;
-//state 0: begin transaction, state 1: transaction in progress, state 2: "confirm" pressed, state 3: transaction finished successfully
+//state 0: begin transaction, state 1: transaction in progress, state 2: "confirm" 
+//pressed, state 3: transaction finished successfully
 int currentState = 0;
 
 void Button_Handler(int button){
