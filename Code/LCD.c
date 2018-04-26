@@ -54,6 +54,13 @@ void drawScreen(int state) {
 	}
 }
 
+void printTag(char response_Tag[]) {
+	for(int a = 0; a < 9; a++) {
+		char printout = response_Tag[8+a];
+		ST7735_OutChar(response_Tag[13+a]);
+	}
+}
+
 void updateAmount(int amount) {
 	
 }
