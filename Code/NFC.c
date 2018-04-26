@@ -233,7 +233,7 @@ int readTag() {
 		int length = processLength();
 		//17 for pcb + ndef
 		sendTransaction(readNumber, 8, 1, length+1);
-		sendRelease();
+		//sendRelease();
 		return 1;
 	}
 	return 0;

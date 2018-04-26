@@ -9,4 +9,6 @@ void writeValue(int data);
 
 void sendRelease(void);
 
+int isTagConnected(void);
+
 void finishRelease(void);

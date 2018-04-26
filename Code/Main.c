@@ -7,7 +7,6 @@
 #include "LCD.h"
 #include "SysTick.h"
 #include "ST7735.h"
-#include "Main.h"
 
 #define F16HZ (50000000/16)
 #define F20KHZ (50000000/20000)
@@ -29,6 +28,10 @@ int sessionAmount = 0;
 //pressed, state 3: transaction finished successfully
 int currentState = 0;
 
+void stateChanged() {
+	drawScreen(currentState);						
+}
+
 void Button_Handler(int button){
 	// button 0: confirm, 1: cancel
 	switch(button) {
@@ -38,15 +41,18 @@ void Button_Handler(int button){
 				}
 				else if (currentState == 2) {
 					currentState = 3;
+					writeValue(sessionAmount);
 				}
 				
-				else currentState = 1;
-				drawScreen(currentState);						
+				stateChanged();
 		} break;
 		case 1: {
-				if (currentState == 2) {
+				if (currentState == 1) {
+					// print some sort of "Want to cancel? Your money will be lost." statement
+				}
+				else if (currentState == 2) {
 					currentState = 1;
-					drawScreen(currentState);
+					stateChanged();
 				}
 		} break;
 		default: {
@@ -56,8 +62,8 @@ void Button_Handler(int button){
 }
 
 void Coin_Handler(void){
-	sessionAmount++;
-	drawScreen(currentState);
+	sessionAmount+=5; // nickel, dime, quarter
+	drawScreen(currentState); //TO-DO: just update amount in future
 }
 
 void initPortE() {
@@ -110,6 +116,14 @@ int main(void){
 	while(1) {
 		//state 0
 		//setup periodic timer to read tag
+		
+		while (currentState == 0) {
+			if (isTagConnected() == 1) {
+				currentState = 1;
+				stateChanged();
+			}
+		}
+		
 		//on receive connected message -> transition state (turn off NFC RF)
 		//state 1
 		//wait for input from Coin Selector -> update screen
