@@ -36,10 +36,28 @@ void Coin_Handler() {
 	
 }
 
+/*void readTag() {
+	sendTransaction(killNFC, 1, 0, 0);
+	sendTransaction(selectNFC, 16, 1, 5);
+	sendTransaction(selectNDEF, 10, 1, 5);
+	
+	//sendTransaction(clearNDEFFileLength, 10, 1, 10);
+	//sendTransaction(confirmed, 30, 1, 10);
+	//sendTransaction(fileLength, 10, 1, 10);
+	
+	sendTransaction(readLength, 8, 1, 7);
+	//int length = processLength();
+	//17 for pcb + ndef
+	sendTransaction(readFile, 8, 1, 17);
+	//sendTransaction(deselect, 3, 1, 5);
+	sendRelease();
+	//printTag(response);
+}*/
+
 int main(void){ 
   PLL_Init(Bus80MHz);              // bus clock at 50 MHz
 	DisableInterrupts();
-	//ST7735_InitR(INITR_REDTAB);
+	ST7735_InitR(INITR_REDTAB);
 	SYSCTL_RCGCGPIO_R |= 0x20;            // activate port F
 	
 	GPIO_PORTF_DIR_R |= 0x06;             // make PF2, PF1 out (built-in LED)
@@ -55,10 +73,11 @@ int main(void){
 	setupNFCBoard();
 	EnableInterrupts();
 	
-	//GPIO_PORTF_DATA_R ^= 0x04;  
-	//readTag();
-	writeValue(536);
-	/*sendTransaction(killNFC, 1, 0, 0);
+	GPIO_PORTF_DATA_R ^= 0x04;  
+	//writeValue(876);
+	while(readTag() == 0);
+//	writeValue(536);
+/*	sendTransaction(killNFC, 1, 0, 0);
 	sendTransaction(selectNFC, 16, 1, 5);
 	
 	sendTransaction(selectSystem, 10, 1, 5);
@@ -72,18 +91,17 @@ int main(void){
 	
 	//sendTransaction(selectCC, command_sizes[2], 1);
 	sendTransaction(selectNDEF, 10, 1, 5);
-	sendTransaction(clearNDEFFileLength, 10, 0, 5); //this works -> will clear ndef length
-	sendTransaction(confirmed, 24, 0, 5); //this works somehow?
-	sendTransaction(fileLength, 10, 0, 5);
-	//sendTransaction(readLength, 8, 1, 7);
+//	sendTransaction(clearNDEFFileLength, 10, 0, 5); //this works -> will clear ndef length
+//	sendTransaction(confirmed, 24, 0, 5); //this works somehow?
+//	sendTransaction(fileLength, 10, 0, 5);
+	sendTransaction(readLength, 8, 1, 7);
 	//int length = processLength();
 	//17 for pcb + ndef
-	//sendTransaction(readFile, 8, 1, 17);
-	//sendTransaction(deselect, 3, 1);
+	sendTransaction(readFile, 8, 1, 17);
 	sendRelease();*/
 	//printTag();
 	
-	//GPIO_PORTF_DATA_R ^= 0x04;  
+	GPIO_PORTF_DATA_R ^= 0x04;  
 	
 	while(1) {
 		//state 0

@@ -57,7 +57,7 @@ int convertToASCII(int number) {
 		savep++;
 	}
 	
-	valueLength = pointer_value;
+	valueLength = pointer_value + 1;
 	
 	while(temp > 0 && pointer_value > 0) {
 		int current = temp%10;
@@ -70,7 +70,7 @@ int convertToASCII(int number) {
 }
 
 int isTagConnected() {
-	readTag();
+	while(readTag() == 0);
 	
 	for(int a = 0; a < 9; a++) {
 		if(response[8+a] != confirmcheck[a]) {
@@ -79,63 +79,6 @@ int isTagConnected() {
 	}
 	
 	return 1;
-}
-
-void writeStartedTransfer() {
-	//need to change length of started write command
-	ndef_length[7] = started[5];
-	writeTag(started, 24);
-}
-
-void writeValue(int data) {
-	for(valueLength = 0; valueLength < 13; valueLength++) {
-		ndef[valueLength] = header[valueLength];
-	}
-	int length = convertToASCII(data);
-	ndef[8] = length + 3;
-	ndef[5] = ndef[8] + 4;
-	uint16_t crc = M24SR_ComputeCrc(ndef, valueLength);
-	ndef[valueLength] = crc&0xFF;
-	valueLength++;
-	ndef[valueLength] = (crc>>8)&0xFF;
-	valueLength++;
-	//concatenate header, ndef, and crc
-	ndef_length[7] = ndef[5];
-	crc = M24SR_ComputeCrc(ndef_length, 8);
-	ndef_length[8] = crc&0xFF;
-	ndef_length[9] = (crc>>8)&0xFF;
-	int a = 0;
-	writeTag(ndef, valueLength);
-}
-
-void writeTag(uint8_t values[], int length) {
-	sendTransaction(killNFC, 1, 0, 0);
-	sendTransaction(selectNFC, 16, 1, 5);
-	sendTransaction(selectNDEF, 10, 1, 5);
-	sendTransaction(clearNDEFFileLength, 10, 0, 5); //this works -> will clear ndef length
-	//sendTransaction(confirmed, 24, 0, 5); //this works somehow?
-	sendTransaction(values, length, 0, 0);
-	//sendTransaction(fileLength, 10, 0, 5);
-	sendTransaction(fileLength, 10, 0, 5);
-	sendRelease();
-}
-
-void readTag() {
-	int success = 0, count = 0;
-	do {
-		success = sendTransaction(getICSession, 1, 0, 1);
-		count++;
-	} while(success == 0 && count < 10);
-	
-	if(success) {
-		sendTransaction(selectNFC, 16, 1, 5);
-		sendTransaction(selectNDEF, 10, 1, 5);
-		sendTransaction(readLength, 8, 1, 7);
-		int length = processLength();
-		//17 for pcb + ndef
-		sendTransaction(readFile, 8, 1, length+1);
-		sendRelease();
-	}
 }
 
 int sendTransaction(uint8_t data[], int size, int has_response, int response_length) {
@@ -162,7 +105,7 @@ int sendTransaction(uint8_t data[], int size, int has_response, int response_len
 	
 	I2C0_MCS_R = (0|I2C_MCS_STOP);
 	while(I2C0_MCS_R&I2C_MCS_BUSY){};// wait for transmission done
-	
+
 	//command reads response
 	if(has_response) {
 		//wait for device ready for receive
@@ -175,11 +118,9 @@ int sendTransaction(uint8_t data[], int size, int has_response, int response_len
 			//loop until slave sends ack
 		} while((I2C0_MCS_R&(I2C_MCS_DATACK)) != 0);
 		
-		/*for(int wait = 0; wait < 100; wait++) {
-			for(int temp = 0; temp < 10; temp++) {
-				
-			}
-		}*/
+		//stop communication
+		I2C0_MCS_R = (0|I2C_MCS_STOP);
+		while(I2C0_MCS_R&I2C_MCS_BUSY){};// wait for transmission done
 
 		//Read receive until no ack
 		int retryCounter = 0;
@@ -206,10 +147,6 @@ int sendTransaction(uint8_t data[], int size, int has_response, int response_len
 
 			} while(((I2C0_MCS_R&(I2C_MCS_ERROR)) != 0) && (retryCounter <= MAXRETRIES));
 			
-			if(retryCounter > MAXRETRIES) {
-				errors++;
-			}
-			
 			first = 0;
 			response_pointer++;
 			received++;
@@ -219,15 +156,14 @@ int sendTransaction(uint8_t data[], int size, int has_response, int response_len
 		//stop communication
 		I2C0_MCS_R = (0|I2C_MCS_STOP);    // master enable
 		while(I2C0_MCS_R&I2C_MCS_BUSY){};// wait for transmission done
-	} else {
-		if(size == 1 && response_length == 1) {
-			if(errors > 0) {
-				return 0;
-			}
-		}
 	}
 	
-	return 1;
+	if(errors > 0) {
+		return -1;
+	}
+	
+	return 0;
+	
 }
 
 void sendRelease() {
@@ -246,3 +182,66 @@ void finishRelease() {
 
 }
 
+void writeTag(uint8_t values[], int length) {
+	sendTransaction(killNFC, 1, 0, 0);
+	sendTransaction(selectNFC, 16, 1, 5);
+	sendTransaction(selectNDEF, 10, 1, 5);
+	sendTransaction(clearNDEFFileLength, 10, 0, 5); //this works -> will clear ndef length
+	//sendTransaction(confirmed, 24, 0, 5); //this works somehow?
+	sendTransaction(values, length, 0, 0);
+	//sendTransaction(fileLength, 10, 0, 5);
+	sendTransaction(ndef_length, 10, 0, 5);
+	sendRelease();
+}
+
+void writeValue(int data) {
+	for(valueLength = 0; valueLength < 13; valueLength++) {
+		ndef[valueLength] = header[valueLength];
+	}
+	int length = convertToASCII(data);
+	ndef[8] = length + 3;
+	ndef[5] = ndef[8] + 4;
+	uint16_t crc = M24SR_ComputeCrc(ndef, valueLength);
+	ndef[valueLength] = crc&0xFF;
+	valueLength++;
+	ndef[valueLength] = (crc>>8)&0xFF;
+	valueLength++;
+	//concatenate header, ndef, and crc
+	ndef_length[7] = ndef[5];
+	crc = M24SR_ComputeCrc(ndef_length, 8);
+	ndef_length[8] = crc&0xFF;
+	ndef_length[9] = (crc>>8)&0xFF;
+	int a = 0;
+	writeTag(ndef, valueLength);
+	//writeTag(confirmed, 24);
+}
+
+int readTag() {
+	int success = -1, count = 0;
+	
+	//sendTransaction(killNFC, 1, 0, 0);
+	do {
+		success = sendTransaction(getICSession, 1, 0, 0);
+		count++;
+	} while(success != 0 && count < 10);
+	
+	if(success == 0) {
+		sendTransaction(selectNFC, 16, 1, 5);
+		
+		sendTransaction(selectNDEF, 10, 1, 5);
+		sendTransaction(readLength, 8, 1, 7);
+		int length = processLength();
+		//17 for pcb + ndef
+		sendTransaction(readNumber, 8, 1, length+1);
+		sendRelease();
+		return 1;
+	}
+	return 0;
+
+}
+
+void writeStartedTransfer() {
+	//need to change length of started write command
+	ndef_length[7] = started[5];
+	writeTag(started, 24);
+}
