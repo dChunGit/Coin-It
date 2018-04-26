@@ -3,10 +3,9 @@
 */
 void setupNFCBoard(void);
 
-/*
-* This function writes to the onboard tag via i2c for transmission to an NFC connected device
-*/
-void sendTransaction(uint8_t array[], int size, int has_response, int response_length);
+int readTag(void);
+
+void writeValue(int data);
 
 void sendRelease(void);
 

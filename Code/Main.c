@@ -60,8 +60,11 @@ void Coin_Handler(void){
 	drawScreen(currentState);
 }
 
-int processLength() {
-	return response[2];
+void initPortE() {
+	// initialize green LED
+	SYSCTL_RCGCGPIO_R |= 0x10;            // activate port E
+	GPIO_PORTE_DIR_R |= 0x20;
+	GPIO_PORTE_DEN_R |= 0x20;
 }
 
 void initPortF() {
@@ -80,35 +83,19 @@ void initNFC() {
 	setupNFCBoard();
 }
 
-void readTag() {
-	sendTransaction(killNFC, 1, 0, 0);
-	sendTransaction(selectNFC, 16, 1, 5);
-	sendTransaction(selectNDEF, 10, 1, 5);
-	
-	sendTransaction(clearNDEFFileLength, 10, 1, 10);
-	sendTransaction(confirmed, 30, 1, 10);
-	sendTransaction(fileLength, 10, 1, 10);
-	
-	sendTransaction(readLength, 8, 1, 7);
-	int length = processLength();
-	//17 for pcb + ndef
-	sendTransaction(readFile, 8, 1, 17);
-	sendTransaction(deselect, 3, 1, 5);
-	sendRelease();
-	printTag(response);
-}
-
 int main(void){ 
-  PLL_Init(Bus80MHz);              // bus clock at 80 MHz
+  PLL_Init(Bus80MHz);              // bus clock at 50 MHz
 	DisableInterrupts();
+	ST7735_InitR(INITR_REDTAB);
 	initPortF();
-	
+	initPortE();
 	Buttons_Init(Button_Handler);
 	setupCoinSelector(Coin_Handler);
-	initNFC();
-	ST7735_InitR(INITR_REDTAB);
+	EnableInterrupts();
 	
-	//debug tag
+	GPIO_PORTF_DATA_R ^= 0x04;  
+	//writeValue(876);
+	while(readTag() == 0);	
 	GPIO_PORTF_DATA_R ^= 0x04;  
 	readTag();
 	GPIO_PORTF_DATA_R ^= 0x04;  
@@ -118,8 +105,8 @@ int main(void){
 	GPIO_PORTE_DIR_R |= 0x20;
 	GPIO_PORTE_DEN_R |= 0x20;
 	
-	EnableInterrupts();
 	drawScreen(currentState);
+
 	while(1) {
 		//state 0
 		//setup periodic timer to read tag
