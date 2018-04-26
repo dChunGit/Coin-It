@@ -24,40 +24,49 @@ extern char response[];
 extern int response_pointer;
 
 int sessionAmount = 0;
-//state 0: begin transaction, state 1: transaction in progress, state 2: transaction finished
+//state 0: begin transaction, state 1: transaction in progress, state 2: "confirm" pressed, 
+//state 3: transaction finished successfully
 int currentState = 0;
 
 void Button_Handler(int button){
+	// button 0: confirm, 1: cancel
 	switch(button) {
+		case 0: {
+				if (currentState == 1) {
+					currentState = 2;
+				}
+				else if (currentState == 2) {
+					currentState = 3;
+				}
+				
+				else currentState = 1;
+				drawScreen(currentState);						
+		} break;
+		case 1: {
+				if (currentState == 2) {
+					currentState = 1;
+					drawScreen(currentState);
+				}
+		} break;
+		default: {
+				//
+		}
 	}
 }
 
-void Coin_Handler() {
-	
+void Coin_Handler(void){
+	sessionAmount++;
+	drawScreen(currentState);
 }
 
-/*void readTag() {
-	sendTransaction(killNFC, 1, 0, 0);
-	sendTransaction(selectNFC, 16, 1, 5);
-	sendTransaction(selectNDEF, 10, 1, 5);
-	
-	//sendTransaction(clearNDEFFileLength, 10, 1, 10);
-	//sendTransaction(confirmed, 30, 1, 10);
-	//sendTransaction(fileLength, 10, 1, 10);
-	
-	sendTransaction(readLength, 8, 1, 7);
-	//int length = processLength();
-	//17 for pcb + ndef
-	sendTransaction(readFile, 8, 1, 17);
-	//sendTransaction(deselect, 3, 1, 5);
-	sendRelease();
-	//printTag(response);
-}*/
+void initPortE() {
+	// initialize green LED
+	SYSCTL_RCGCGPIO_R |= 0x10;            // activate port E
+	GPIO_PORTE_DIR_R |= 0x20;
+	GPIO_PORTE_DEN_R |= 0x20;
+}
 
-int main(void){ 
-  PLL_Init(Bus80MHz);              // bus clock at 50 MHz
-	DisableInterrupts();
-	ST7735_InitR(INITR_REDTAB);
+void initPortF() {
 	SYSCTL_RCGCGPIO_R |= 0x20;            // activate port F
 	
 	GPIO_PORTF_DIR_R |= 0x06;             // make PF2, PF1 out (built-in LED)
@@ -66,43 +75,30 @@ int main(void){
                                         // configure PF2 as GPIO
   GPIO_PORTF_PCTL_R = (GPIO_PORTF_PCTL_R&0xFFFFF00F)+0x00000000;
   GPIO_PORTF_AMSEL_R = 0;               // disable analog functionality on PF
-	
+}
+
+void initNFC() {
 	SysTick_Init(80000, finishRelease);
+	setupNFCBoard();
+}
+
+int main(void){ 
+  PLL_Init(Bus80MHz);              // bus clock at 50 MHz
+	DisableInterrupts();
+	ST7735_InitR(INITR_REDTAB);
+	initPortF();
+	initPortE();
 	Buttons_Init(Button_Handler);
 	setupCoinSelector(Coin_Handler);
-	setupNFCBoard();
 	EnableInterrupts();
 	
 	GPIO_PORTF_DATA_R ^= 0x04;  
 	//writeValue(876);
-	while(readTag() == 0);
-//	writeValue(536);
-/*	sendTransaction(killNFC, 1, 0, 0);
-	sendTransaction(selectNFC, 16, 1, 5);
-	
-	sendTransaction(selectSystem, 10, 1, 5);
-	sendTransaction(readSystemLength, 8, 1, 7);
-	sendTransaction(readSystemContent, 8, 1, 23);
-	sendTransaction(verifyPassword, 24, 1, 5);
-	sendTransaction(setGPO2, 9, 1, 5);
-	sendTransaction(selectSystem2, 10, 1, 5);
-	sendTransaction(readSystemLength2, 8, 1, 7);
-	sendTransaction(readSystemContent2, 8, 1, 23);
-	
-	//sendTransaction(selectCC, command_sizes[2], 1);
-	sendTransaction(selectNDEF, 10, 1, 5);
-//	sendTransaction(clearNDEFFileLength, 10, 0, 5); //this works -> will clear ndef length
-//	sendTransaction(confirmed, 24, 0, 5); //this works somehow?
-//	sendTransaction(fileLength, 10, 0, 5);
-	sendTransaction(readLength, 8, 1, 7);
-	//int length = processLength();
-	//17 for pcb + ndef
-	sendTransaction(readFile, 8, 1, 17);
-	sendRelease();*/
-	//printTag();
-	
+	while(readTag() == 0);	
 	GPIO_PORTF_DATA_R ^= 0x04;  
 	
+	drawScreen(currentState);
+
 	while(1) {
 		//state 0
 		//setup periodic timer to read tag
