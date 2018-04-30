@@ -94,17 +94,12 @@ int main(void){
 	setupCoinSelector(Coin_Handler);
 	EnableInterrupts();
 	
-	GPIO_PORTF_DATA_R ^= 0x04;  
-	readTag(0);  
+	//GPIO_PORTF_DATA_R ^= 0x04;  
+	//readTag(0);  
 	//writeValue(456);
 	//while(readTag() == 0);	
 	//GPIO_PORTF_DATA_R ^= 0x04;  
-	readTag(0);  
-	
-	// initialize green LED
-	SYSCTL_RCGCGPIO_R |= 0x10;            // activate port E
-	GPIO_PORTE_DIR_R |= 0x20;
-	GPIO_PORTE_DEN_R |= 0x20;
+	//readTag(0);  
 	
 	drawScreen(currentState);
 	int connected = 0, transferred = 0;
@@ -117,14 +112,14 @@ int main(void){
 			
 			//app will not write until it detects a number
 			if(!connected) {
-				GPIO_PORTF_DATA_R ^= 0x04;
+				GPIO_PORTE_DATA_R ^= 0x20;
 				currentState = 1;
 				
 				//wait until done inserting coins, then write tag and continue
 				while(currentState == 1){}
 				//currentState = 2;
 					
-				writeValue(sessionAmount);
+				writeValue(847);
 				releaseTag();
 				transferred = 1;
 			}
@@ -136,7 +131,7 @@ int main(void){
 				//state 3 -> transfer ack by app
 				currentState = 3;
 				//reset state
-				GPIO_PORTF_DATA_R ^= 0x04;
+				GPIO_PORTE_DATA_R ^= 0x20;
 				connected = 0;
 				transferred = 0;
 				//start timeout here, set currentState to 0 when done

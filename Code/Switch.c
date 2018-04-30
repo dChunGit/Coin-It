@@ -50,6 +50,6 @@ void GPIOPortE_Handler(void){
 		rVal = 1;
   }
 	
-	(*InputTask)(rVal);
 	Timer1_Init();
+	(*InputTask)(rVal);
 }
