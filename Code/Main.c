@@ -63,7 +63,7 @@ void Button_Handler(int button){
 
 void Coin_Handler(void){
 	sessionAmount+=5; // nickel, dime, quarter
-	drawScreen(currentState); //TO-DO: just update amount in future
+	drawAmount(); //TO-DO: just update amount in future
 }
 
 void initPortE() {
@@ -99,30 +99,35 @@ int main(void){
 	setupCoinSelector(Coin_Handler);
 	EnableInterrupts();
 	
+	/*
 	GPIO_PORTF_DATA_R ^= 0x04;  
 	//writeValue(876);
 	while(readTag() == 0);	
 	GPIO_PORTF_DATA_R ^= 0x04;  
 	readTag();
-	GPIO_PORTF_DATA_R ^= 0x04;  
+	GPIO_PORTF_DATA_R ^= 0x04;  */
 	
 	// initialize green LED
 	SYSCTL_RCGCGPIO_R |= 0x10;            // activate port E
 	GPIO_PORTE_DIR_R |= 0x20;
 	GPIO_PORTE_DEN_R |= 0x20;
 	
+	currentState = 3;
+	sessionAmount = 1024;
 	drawScreen(currentState);
 
 	while(1) {
 		//state 0
 		//setup periodic timer to read tag
 		
+		/*
 		while (currentState == 0) {
 			if (isTagConnected() == 1) {
 				currentState = 1;
 				stateChanged();
 			}
-		}
+		}*/
+		
 		
 		//on receive connected message -> transition state (turn off NFC RF)
 		//state 1

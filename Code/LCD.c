@@ -8,37 +8,56 @@
 #include <stdint.h>
 #include "../inc/tm4c123gh6pm.h"
 #include "ST7735.h"  
+#include "Bitmaps.h"
+
+
 
 extern int sessionAmount;
+
+void drawAmount() {
+	int temp = sessionAmount;
+	int hundredth = temp % 10;
+	temp = temp/10;
+	int tenth = temp % 10;
+	temp = temp/10;
+	int first = temp % 10;
+	int second = temp/10;
+	
+	/*
+	ST7735_DrawBitmap(10, 80, dollar, 20, 40);
+	if (second != 0) {
+			ST7735_DrawBitmap(30, 80, numbers[second], 20, 40);
+	}
+	ST7735_DrawBitmap(50, 80, numbers[first], 20, 40);
+	ST7735_DrawBitmap(70, 80, period, 20, 40);
+	ST7735_DrawBitmap(85, 80, numbers[tenth], 20, 40);
+	ST7735_DrawBitmap(105, 80, n, 20, 40);
+	*/
+	
+	ST7735_SetCursor(7, 6);
+	char string[] = {'$', second + '0', first + '0', '.', tenth + '0', hundredth + '0',};
+	ST7735_OutString(string);
+}
 
 void drawScreen(int state) {
 	
 	if (state == 0) {
-		ST7735_FillScreen(0);                 // set screen to black
-		ST7735_SetCursor(0, 0);
-		ST7735_OutString("Welcome! Please place your phone on the stand to begin transaction.");
+		ST7735_DrawBitmap(0, 160, home, 128, 160);
 	}
 	
 	else if (state == 1) {
-		ST7735_FillScreen(0);                 // set screen to black
-		ST7735_SetCursor(0, 0);
-		ST7735_OutUDec(sessionAmount);
+		ST7735_DrawBitmap(0, 160, coininsert, 128, 160);
+		drawAmount();
 	}
 	
 	else if (state == 2) {
-		ST7735_FillScreen(0);
-		ST7735_SetCursor(0, 0);
-		ST7735_OutString("Deposit ");
-		ST7735_OutUDec(sessionAmount);
-		ST7735_OutString(" into your account?");
+		ST7735_DrawBitmap(0, 160, confirm, 128, 160);
+		drawAmount();
 	}
 	
 	else if (state == 3) {
-		ST7735_FillScreen(0);                 // set screen to black
-		ST7735_SetCursor(0, 0);
-		ST7735_OutUDec(sessionAmount); // TO-DO: modify to make it into a dollar value
-		ST7735_OutString(" has been deposited into your account. Thank you for using CoinIt. Don't forget your phone!");
-		
+		ST7735_DrawBitmap(0, 160, final, 128, 160);
+		drawAmount();
 		int temp = 0;
 		int temp2 = 0;
 		while (temp2 < 100) { // wait arbitrary amount of time before returning to home screen

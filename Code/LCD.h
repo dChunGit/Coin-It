@@ -10,6 +10,8 @@
 */
 void drawScreen(int state);
 
+void drawAmount(void);
+
 /*
 * Function prints tag value for debugging
 */
