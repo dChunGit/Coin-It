@@ -88,20 +88,38 @@ int main(void){
 	ST7735_InitR(INITR_REDTAB);
 	initPortF();
 	initPortE();
+	initNFC();
 	Buttons_Init(Button_Handler);
 	setupCoinSelector(Coin_Handler);
 	EnableInterrupts();
 	
 	GPIO_PORTF_DATA_R ^= 0x04;  
-	//writeValue(876);
-	while(readTag() == 0);	
-	GPIO_PORTF_DATA_R ^= 0x04;  
+	readTag(0);  
+	//writeValue(456);
+	//while(readTag() == 0);	
+	//GPIO_PORTF_DATA_R ^= 0x04;  
+	readTag(0);  
+	
+	// initialize green LED
+	/*SYSCTL_RCGCGPIO_R |= 0x10;            // activate port E
+	GPIO_PORTE_DIR_R |= 0x20;
+	GPIO_PORTE_DEN_R |= 0x20;*/
 	
 	drawScreen(currentState);
 
 	while(1) {
 		//state 0
 		//setup periodic timer to read tag
+		if(isTagConnected()) {
+			GPIO_PORTF_DATA_R ^= 0x04;
+			
+			writeValue(876);
+			readTag(0);
+			if(isTransferred()) {
+				GPIO_PORTF_DATA_R ^= 0x04;
+			}
+		}
+		
 		//on receive connected message -> transition state (turn off NFC RF)
 		//state 1
 		//wait for input from Coin Selector -> update screen
@@ -109,5 +127,4 @@ int main(void){
 		//state 2
 		//on receive completed message -> transition state
 	}
-
 }

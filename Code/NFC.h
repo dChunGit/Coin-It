@@ -3,9 +3,17 @@
 */
 void setupNFCBoard(void);
 
-int readTag(void);
+int readTag(int type);
+
+int isTagConnected(void);
+
+int isTransferred(void);
 
 void writeValue(int data);
+
+void holdTag(void);
+
+void releaseTag(void);
 
 void sendRelease(void);
 

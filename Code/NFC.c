@@ -21,8 +21,11 @@ int response_pointer = 0;
 uint8_t ndef[30];
 uint8_t ndef_length[] = {0x02, 0x00, 0xD6, 0x00, 0x00, 0x02, 0x00, 0x10, 0x55, 0xA6};
 
+uint8_t readIn[] = {0x02, 0x00, 0xB0, 0x00, 0x02, 0x10, 0x48, 0x7D};
+
 int valueLength = 0;
-uint8_t confirmcheck[] = "Connected";
+uint8_t confirmcheck[] = "Confirmed";
+uint8_t donecheck[] = "Done";
 
 int8_t slave = 0x56;
 
@@ -70,15 +73,39 @@ int convertToASCII(int number) {
 }
 
 int isTagConnected() {
-	while(readTag() == 0);
+	int readR = readTag(1);
 	
-	for(int a = 0; a < 9; a++) {
-		if(response[8+a] != confirmcheck[a]) {
-			return 0;
+	if(readR != 0) {
+		
+		for(int a = 0; a < 9; a++) {
+			if(response[8+a] != confirmcheck[a]) {
+				return 0;
+			}
 		}
+		
+		//holdTag();
+		return 1;
 	}
 	
-	return 1;
+	return 0;
+}
+
+int isTransferred() {
+	int readR = readTag(1);
+	
+	if(readR != 0) {
+	
+		for(int a = 0; a < 4; a++) {
+			if(response[8+a] != donecheck[a]) {
+				return 0;
+			}
+		}
+		
+		//holdTag();
+		return 1;
+	}
+	
+	return 0;
 }
 
 int sendTransaction(uint8_t data[], int size, int has_response, int response_length) {
@@ -109,14 +136,18 @@ int sendTransaction(uint8_t data[], int size, int has_response, int response_len
 	//command reads response
 	if(has_response) {
 		//wait for device ready for receive
-		do {
+	/*	do {
 			I2C0_MSA_R = (slave<<1)&0xFE;
 			I2C0_MSA_R &= ~0x01;
 			I2C0_MCS_R = (0|I2C_MCS_STOP|I2C_MCS_START|I2C_MCS_RUN);    // send request waiting for ack
 			while(I2C0_MCS_R&I2C_MCS_BUSY){};// wait for transmission done
 				
 			//loop until slave sends ack
-		} while((I2C0_MCS_R&(I2C_MCS_DATACK)) != 0);
+		} while((I2C0_MCS_R&(I2C_MCS_DATACK)) != 0);*/
+		for(int temp = 0; temp < 1000; temp++) {
+			for(int count = 0; count < 100; count++) {
+			}
+		}
 		
 		//stop communication
 		I2C0_MCS_R = (0|I2C_MCS_STOP);
@@ -156,6 +187,11 @@ int sendTransaction(uint8_t data[], int size, int has_response, int response_len
 		//stop communication
 		I2C0_MCS_R = (0|I2C_MCS_STOP);    // master enable
 		while(I2C0_MCS_R&I2C_MCS_BUSY){};// wait for transmission done
+	} else {
+		for(int temp = 0; temp < 1000; temp++) {
+			for(int count = 0; count < 100; count++) {
+			}
+		}
 	}
 	
 	if(errors > 0) {
@@ -164,6 +200,14 @@ int sendTransaction(uint8_t data[], int size, int has_response, int response_len
 	
 	return 0;
 	
+}
+
+void holdTag() {
+		sendTransaction(killNFC, 1, 0, 0);
+}
+
+void releaseTag() {
+	 sendRelease();
 }
 
 void sendRelease() {
@@ -216,7 +260,7 @@ void writeValue(int data) {
 	//writeTag(confirmed, 24);
 }
 
-int readTag() {
+int readTag(int type) {
 	int success = -1, count = 0;
 	
 	//sendTransaction(killNFC, 1, 0, 0);
@@ -231,8 +275,17 @@ int readTag() {
 		sendTransaction(selectNDEF, 10, 1, 5);
 		sendTransaction(readLength, 8, 1, 7);
 		int length = processLength();
+		readIn[5] = length&0xFF;
 		//17 for pcb + ndef
-		sendTransaction(readNumber, 8, 1, length+1);
+		uint16_t crc = M24SR_ComputeCrc(readIn, 6);
+		readIn[6] = crc&0xFF;
+		readIn[7] = (crc>>8)&0xFF;
+		/*if(type) {
+			sendTransaction(readFile, 8, 1, length+1);
+		} else {
+			sendTransaction(readNumber, 8, 1, length+1);
+		}*/
+		sendTransaction(readIn, 8, 1, length+1);
 		sendRelease();
 		return 1;
 	}
