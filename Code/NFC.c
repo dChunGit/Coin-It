@@ -218,6 +218,14 @@ void finishRelease() {
 
 }*/
 
+void holdTag() {
+		sendTransaction(killNFC, 1, 0, 0);
+}
+
+void releaseTag() {
+		sendTransaction(deselect, 3, 1, 5);
+}
+
 void writeTag(uint8_t values[], int length) {
 	sendTransaction(killNFC, 1, 0, 0);
 	sendTransaction(selectNFC, 16, 1, 5);
@@ -279,7 +287,9 @@ int readTag(int type) {
 			sendTransaction(readNumber, 8, 1, length+1);
 		}*/
 		sendTransaction(readIn, 8, 1, length+1);
-	  sendTransaction(deselect, 3, 1, 5);
+		if(type != 1) {
+			sendTransaction(deselect, 3, 1, 5);
+		}
 		//sendRelease();
 		return 1;
 	}

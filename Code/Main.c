@@ -38,8 +38,9 @@ void Button_Handler(int button){
 				else if (currentState == 2) {
 					currentState = 3;
 				}
-				
-				else currentState = 1;
+				else if(currentState == 3) {
+					currentState = 0;
+				}
 				drawScreen(currentState);						
 		} break;
 		case 1: {
@@ -101,30 +102,56 @@ int main(void){
 	readTag(0);  
 	
 	// initialize green LED
-	/*SYSCTL_RCGCGPIO_R |= 0x10;            // activate port E
+	SYSCTL_RCGCGPIO_R |= 0x10;            // activate port E
 	GPIO_PORTE_DIR_R |= 0x20;
-	GPIO_PORTE_DEN_R |= 0x20;*/
+	GPIO_PORTE_DEN_R |= 0x20;
 	
 	drawScreen(currentState);
-	int connected = 0;
+	int connected = 0, transferred = 0;
 
+	currentState = 0;
+	
 	while(1) {
-		//state 0
-		//setup periodic timer to read tag
+		//confirm message detected
 		if(isTagConnected() || connected) {
-			GPIO_PORTF_DATA_R ^= 0x04;
-
+			
+			//app will not write until it detects a number
 			if(!connected) {
-				//wait until semaphore set, then write tag and continue
-				writeValue(876);
+				GPIO_PORTF_DATA_R ^= 0x04;
+				currentState = 1;
+				
+				//wait until done inserting coins, then write tag and continue
+				while(currentState == 1){}
+				//currentState = 2;
+					
+				writeValue(sessionAmount);
+				releaseTag();
+				transferred = 1;
 			}
+			//number is written and detected by app which writes done message
 			connected = 1;
-			//readTag(0);
+			
+			//data has been transferred and ack received from app
 			if(isTransferred()) {
+				//state 3 -> transfer ack by app
+				currentState = 3;
+				//reset state
 				GPIO_PORTF_DATA_R ^= 0x04;
 				connected = 0;
+				transferred = 0;
+				//start timeout here, set currentState to 0 when done
+				//wait until timeout to start new transaction loop
+				while(currentState == 3){}
+				sessionAmount = 0;
+				//currentState = 0;
+				releaseTag();
 			}
 		}
+		
+		if(!connected || transferred) {
+			releaseTag();
+		}
+		
 		for(int temp = 0; temp < 10000; temp++) {
 			for(int counta = 0; counta < 2000; counta++) {
 			}
