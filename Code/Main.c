@@ -78,7 +78,7 @@ void initPortF() {
 }
 
 void initNFC() {
-	SysTick_Init(80000, finishRelease);
+	//SysTick_Init(80000, finishRelease);
 	setupNFCBoard();
 }
 
@@ -106,20 +106,29 @@ int main(void){
 	GPIO_PORTE_DEN_R |= 0x20;*/
 	
 	drawScreen(currentState);
+	int connected = 0;
 
 	while(1) {
 		//state 0
 		//setup periodic timer to read tag
-		if(isTagConnected()) {
+		if(isTagConnected() || connected) {
 			GPIO_PORTF_DATA_R ^= 0x04;
-			
-			writeValue(876);
-			readTag(0);
+
+			if(!connected) {
+				//wait until semaphore set, then write tag and continue
+				writeValue(876);
+			}
+			connected = 1;
+			//readTag(0);
 			if(isTransferred()) {
 				GPIO_PORTF_DATA_R ^= 0x04;
+				connected = 0;
 			}
 		}
-		
+		for(int temp = 0; temp < 10000; temp++) {
+			for(int counta = 0; counta < 2000; counta++) {
+			}
+		}
 		//on receive connected message -> transition state (turn off NFC RF)
 		//state 1
 		//wait for input from Coin Selector -> update screen

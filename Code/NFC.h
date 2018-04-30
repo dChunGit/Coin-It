@@ -15,6 +15,6 @@ void holdTag(void);
 
 void releaseTag(void);
 
-void sendRelease(void);
+/*void sendRelease(void);
 
-void finishRelease(void);
+void finishRelease(void);*/

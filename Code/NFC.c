@@ -201,15 +201,7 @@ int sendTransaction(uint8_t data[], int size, int has_response, int response_len
 	return 0;
 	
 }
-
-void holdTag() {
-		sendTransaction(killNFC, 1, 0, 0);
-}
-
-void releaseTag() {
-	 sendRelease();
-}
-
+/*
 void sendRelease() {
 		I2C0_MSA_R = (slave<<1)&0xFE;    // MSA[7:1] is slave address
 		I2C0_MSA_R |= 0x01;              // MSA[0] is 1 for receive
@@ -224,7 +216,7 @@ void finishRelease() {
 		I2C0_MCS_R = (0|I2C_MCS_STOP);    // master enable
 		while(I2C0_MCS_R&I2C_MCS_BUSY){};// wait for transmission done
 
-}
+}*/
 
 void writeTag(uint8_t values[], int length) {
 	sendTransaction(killNFC, 1, 0, 0);
@@ -235,7 +227,8 @@ void writeTag(uint8_t values[], int length) {
 	sendTransaction(values, length, 0, 0);
 	//sendTransaction(fileLength, 10, 0, 5);
 	sendTransaction(ndef_length, 10, 0, 5);
-	sendRelease();
+	sendTransaction(deselect, 3, 1, 5);
+	//sendRelease();
 }
 
 void writeValue(int data) {
@@ -286,7 +279,8 @@ int readTag(int type) {
 			sendTransaction(readNumber, 8, 1, length+1);
 		}*/
 		sendTransaction(readIn, 8, 1, length+1);
-		sendRelease();
+	  sendTransaction(deselect, 3, 1, 5);
+		//sendRelease();
 		return 1;
 	}
 	return 0;
