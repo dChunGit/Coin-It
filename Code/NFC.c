@@ -235,7 +235,7 @@ void writeTag(uint8_t values[], int length) {
 	sendTransaction(values, length, 0, 0);
 	//sendTransaction(fileLength, 10, 0, 5);
 	sendTransaction(ndef_length, 10, 0, 5);
-	sendTransaction(deselect, 3, 1, 5);
+	//sendTransaction(deselect, 3, 1, 5);
 	//sendRelease();
 }
 

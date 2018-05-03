@@ -24,6 +24,7 @@ extern char response[];
 extern int response_pointer;
 
 int sessionAmount = 0;
+int cancelPushed = 0;
 //state 0: begin transaction, state 1: transaction in progress, state 2: "confirm" pressed, 
 //state 3: transaction finished successfully
 int currentState = 0;
@@ -48,6 +49,7 @@ void Button_Handler(int button){
 		} break;
 		case 1: {
 				if (currentState == 2) {
+					cancelPushed = 1;
 					currentState = 1;
 					drawScreen(currentState);
 				}
@@ -118,16 +120,17 @@ int main(void){
 				while(currentState == 1){}
 				//currentState = 2;
 				drawScreen(currentState);	
-				while(currentState == 2){}
-					
-				writeValue(sessionAmount);
-				releaseTag();
-				transferred = 1;
-				drawScreen(currentState);
 			}
 			//number is written and detected by app which writes done message
 			connected = 1;
-			
+			while(currentState == 2){}
+			if(cancelPushed) {
+				writeValue(sessionAmount);
+				releaseTag();
+				transferred = 1;
+				cancelPushed = 0;
+				drawScreen(currentState);
+			}
 			//data has been transferred and ack received from app
 			if(isTransferred()) {
 				//state 3 -> transfer ack by app
@@ -137,6 +140,7 @@ int main(void){
 				GPIO_PORTE_DATA_R ^= 0x20;
 				connected = 0;
 				transferred = 0;
+				cancelPushed = 0;
 				//start timeout here, set currentState to 0 when done
 				//wait until timeout to start new transaction loop
 				while(currentState == 4){}
