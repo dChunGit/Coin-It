@@ -24,13 +24,9 @@ extern char response[];
 extern int response_pointer;
 
 int sessionAmount = 0;
-//state 0: begin transaction, state 1: transaction in progress, state 2: "confirm" 
-//pressed, state 3: transaction finished successfully
+//state 0: begin transaction, state 1: transaction in progress, state 2: "confirm" pressed, 
+//state 3: transaction finished successfully
 int currentState = 0;
-
-void stateChanged() {
-	drawScreen(currentState);						
-}
 
 void Button_Handler(int button){
 	// button 0: confirm, 1: cancel
@@ -41,18 +37,15 @@ void Button_Handler(int button){
 				}
 				else if (currentState == 2) {
 					currentState = 3;
-					writeValue(sessionAmount);
 				}
-				
-				stateChanged();
+				else if(currentState == 3) {
+					currentState = 0;
+				}					
 		} break;
 		case 1: {
-				if (currentState == 1) {
-					// print some sort of "Want to cancel? Your money will be lost." statement
-				}
-				else if (currentState == 2) {
+				if (currentState == 2) {
 					currentState = 1;
-					stateChanged();
+					drawScreen(currentState);
 				}
 		} break;
 		default: {
@@ -62,8 +55,8 @@ void Button_Handler(int button){
 }
 
 void Coin_Handler(void){
-	sessionAmount+=5; // nickel, dime, quarter
-	drawAmount(); //TO-DO: just update amount in future
+	sessionAmount += 5;
+	drawScreen(currentState);
 }
 
 void initPortE() {
@@ -85,7 +78,7 @@ void initPortF() {
 }
 
 void initNFC() {
-	SysTick_Init(80000, finishRelease);
+	//SysTick_Init(80000, finishRelease);
 	setupNFCBoard();
 }
 
@@ -95,40 +88,66 @@ int main(void){
 	ST7735_InitR(INITR_REDTAB);
 	initPortF();
 	initPortE();
+	initNFC();
 	Buttons_Init(Button_Handler);
 	setupCoinSelector(Coin_Handler);
 	EnableInterrupts();
 	
-	/*
-	GPIO_PORTF_DATA_R ^= 0x04;  
-	//writeValue(876);
-	while(readTag() == 0);	
-	GPIO_PORTF_DATA_R ^= 0x04;  
-	readTag();
-	GPIO_PORTF_DATA_R ^= 0x04;  */
 	
-	// initialize green LED
-	SYSCTL_RCGCGPIO_R |= 0x10;            // activate port E
-	GPIO_PORTE_DIR_R |= 0x20;
-	GPIO_PORTE_DEN_R |= 0x20;
-	
-	currentState = 3;
-	sessionAmount = 1024;
-	drawScreen(currentState);
+	//drawScreen(currentState);
+	int connected = 0, transferred = 0;
 
+	currentState = 0;
+	drawScreen(currentState);
+	
 	while(1) {
-		//state 0
-		//setup periodic timer to read tag
-		
-		/*
-		while (currentState == 0) {
-			if (isTagConnected() == 1) {
+		//confirm message detected
+		if(isTagConnected() || connected) {
+			
+			//app will not write until it detects a number
+			if(!connected) {
+				GPIO_PORTE_DATA_R ^= 0x20;
 				currentState = 1;
-				stateChanged();
+				drawScreen(currentState);	
+				//wait until done inserting coins, then write tag and continue
+				while(currentState == 1){				}
+				//currentState = 2;
+				drawScreen(currentState);	
+					
+				writeValue(sessionAmount);
+				releaseTag();
+				transferred = 1;
 			}
-		}*/
+			//number is written and detected by app which writes done message
+			connected = 1;
+			
+			//data has been transferred and ack received from app
+			if(isTransferred()) {
+				//state 3 -> transfer ack by app
+				currentState = 3;
+				drawScreen(currentState);	
+				//reset state
+				GPIO_PORTE_DATA_R ^= 0x20;
+				connected = 0;
+				transferred = 0;
+				//start timeout here, set currentState to 0 when done
+				//wait until timeout to start new transaction loop
+				while(currentState == 3){}
+				drawScreen(currentState);	
+				sessionAmount = 0;
+				//currentState = 0;
+				releaseTag();
+			}
+		}
 		
+		if(!connected || transferred) {
+			releaseTag();
+		}
 		
+		for(int temp = 0; temp < 10000; temp++) {
+			for(int counta = 0; counta < 2000; counta++) {
+			}
+		}
 		//on receive connected message -> transition state (turn off NFC RF)
 		//state 1
 		//wait for input from Coin Selector -> update screen

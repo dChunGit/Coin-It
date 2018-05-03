@@ -34,6 +34,7 @@ void Buttons_Init(void(*task)(int i)) {
   GPIO_PORTE_IS_R &= ~0x0C;   // PE3-2 is edge-sensitive 
   GPIO_PORTE_IBE_R &= ~0x0C;  // PE3-2 is not both edges 
   GPIO_PORTE_IEV_R |= 0x0C;   // PE3-2 rising edge event
+	GPIO_PORTE_PUR_R |= 0x0C;
 	Buttons_Arm();
 }
 
@@ -41,15 +42,15 @@ void GPIOPortE_Handler(void){
 	GPIO_PORTE_IM_R &= ~0x0C;     // disarm interrupt 
 	int rVal = -1;
 	
-	if(GPIO_PORTE_RIS_R&0x04){  // poll PE2
-    GPIO_PORTE_ICR_R = 0x04;  // acknowledge flag2
+	if(GPIO_PORTE_RIS_R&0x08){  // poll PE2
+    GPIO_PORTE_ICR_R = 0x08;  // acknowledge flag2
 		rVal = 0;
   }
-	else if(GPIO_PORTE_RIS_R&0x08){  // poll PE3
+	else if(GPIO_PORTE_RIS_R&0x04){  // poll PE3
     GPIO_PORTE_ICR_R = 0x04;  // acknowledge flag2
 		rVal = 1;
   }
 	
-	(*InputTask)(rVal);
 	Timer1_Init();
+	(*InputTask)(rVal);
 }

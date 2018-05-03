@@ -10,9 +10,8 @@
 #include "ST7735.h"  
 #include "Bitmaps.h"
 
-
-
 extern int sessionAmount;
+extern int currentState;
 
 void drawAmount() {
 	int temp = sessionAmount;
@@ -68,8 +67,9 @@ void drawScreen(int state) {
 			}
 		}
 		sessionAmount = 0;
-		state = 0;
-		drawScreen(state);
+		//state = 0;
+		currentState = 0;
+		drawScreen(currentState);
 	}
 }
 
