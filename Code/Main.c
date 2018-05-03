@@ -39,8 +39,12 @@ void Button_Handler(int button){
 					currentState = 3;
 				}
 				else if(currentState == 3) {
+					currentState = 4;
+				}
+				else if(currentState == 4) {
 					currentState = 0;
-				}					
+				}
+				drawScreen(currentState);
 		} break;
 		case 1: {
 				if (currentState == 2) {
@@ -106,17 +110,20 @@ int main(void){
 			
 			//app will not write until it detects a number
 			if(!connected) {
+				sessionAmount = 0;
 				GPIO_PORTE_DATA_R ^= 0x20;
 				currentState = 1;
 				drawScreen(currentState);	
 				//wait until done inserting coins, then write tag and continue
-				while(currentState == 1){				}
+				while(currentState == 1){}
 				//currentState = 2;
 				drawScreen(currentState);	
+				while(currentState == 2){}
 					
 				writeValue(sessionAmount);
 				releaseTag();
 				transferred = 1;
+				drawScreen(currentState);
 			}
 			//number is written and detected by app which writes done message
 			connected = 1;
@@ -124,7 +131,7 @@ int main(void){
 			//data has been transferred and ack received from app
 			if(isTransferred()) {
 				//state 3 -> transfer ack by app
-				currentState = 3;
+				currentState = 4;
 				drawScreen(currentState);	
 				//reset state
 				GPIO_PORTE_DATA_R ^= 0x20;
@@ -132,9 +139,9 @@ int main(void){
 				transferred = 0;
 				//start timeout here, set currentState to 0 when done
 				//wait until timeout to start new transaction loop
-				while(currentState == 3){}
-				drawScreen(currentState);	
+				while(currentState == 4){}
 				sessionAmount = 0;
+				drawScreen(currentState);	
 				//currentState = 0;
 				releaseTag();
 			}
