@@ -55,6 +55,10 @@ void drawScreen(int state) {
 	}
 	
 	else if (state == 3) {
+		ST7735_DrawBitmap(0, 160, end, 128, 160);
+	}
+	
+	else if (state == 4) {
 		ST7735_DrawBitmap(0, 160, final, 128, 160);
 		drawAmount();
 		int temp = 0;
