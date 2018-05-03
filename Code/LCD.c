@@ -33,7 +33,7 @@ void drawAmount() {
 	ST7735_DrawBitmap(105, 80, n, 20, 40);
 	*/
 	
-	ST7735_SetCursor(7, 6);
+	ST7735_SetCursor(7, 7);
 	char string[] = {'$', second + '0', first + '0', '.', tenth + '0', hundredth + '0',};
 	ST7735_OutString(string);
 }
