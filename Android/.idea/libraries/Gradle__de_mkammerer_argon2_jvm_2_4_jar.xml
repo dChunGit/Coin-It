@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: de.mkammerer:argon2-jvm:2.4@jar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/de.mkammerer/argon2-jvm/2.4/5b9a161d687ab84d1669713420ecad7b0fa8f629/argon2-jvm-2.4.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/de.mkammerer/argon2-jvm/2.4/9804607a0e62948c44a9d4f7620e510411c4b7ee/argon2-jvm-2.4-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
