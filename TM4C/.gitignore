@@ -4,9 +4,9 @@
 # But not these files...
 !.gitignore
 !/*.pdf
-!*.xls
-!/*.sch
-!/*.pcb
+!/*.uvproj
+!/*.uvopt
+!/*.c
+!/*.h
+!/*.s
 !/*.png
-!TM4C/
-!Android/
