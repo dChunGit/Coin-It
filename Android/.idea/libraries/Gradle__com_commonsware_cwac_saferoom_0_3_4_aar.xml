@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="Gradle: com.commonsware.cwac:saferoom:0.3.4@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/56b1377b10aeb852e97319ef8e9fb040/jetified-saferoom-0.3.4/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/56b1377b10aeb852e97319ef8e9fb040/jetified-saferoom-0.3.4/res" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.commonsware.cwac/saferoom/0.3.4/d85d46e2fe2d8420b71d395ec3cbab66b5388812/saferoom-0.3.4-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.commonsware.cwac/saferoom/0.3.4/651f291f1e633890db632227d425c01d4daab120/saferoom-0.3.4-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
