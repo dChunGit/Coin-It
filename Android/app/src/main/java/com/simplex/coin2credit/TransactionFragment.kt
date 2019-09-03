@@ -2,44 +2,33 @@ package com.simplex.coin2credit
 
 import android.app.AlertDialog
 import android.app.Dialog
-import android.content.DialogInterface
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
-import android.widget.TextView
+import androidx.fragment.app.DialogFragment
+import kotlinx.android.synthetic.main.dialog_tag.*
 
 class TransactionFragment: DialogFragment() {
     companion object {
-        fun newInstance(amount: Int): TransactionFragment {
-            val transactionFragment = TransactionFragment()
-            val args = Bundle()
-            args.putInt("amount", amount)
-            transactionFragment.arguments = args
-
-            return transactionFragment
+        fun newInstance(amount: Int): TransactionFragment = TransactionFragment().apply {
+            arguments = Bundle().apply { putInt("amount", amount) }
         }
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = AlertDialog.Builder(activity)
-        val inflater = activity?.layoutInflater
-        val view = inflater?.inflate(R.layout.dialog_tag, null)
+        val view = activity?.layoutInflater?.inflate(R.layout.dialog_tag, null)
 
-        val messageNum = arguments!!.getInt("amount")
-        val second = when(messageNum%100) {
-            in 0..9 -> String.format("0%d", messageNum%100)
-            else -> String.format("%d", messageNum%100)
+        arguments?.getInt("amount")?.let { messageNum ->
+            val second = when (messageNum%100) {
+                in 0..9 -> String.format("0%d", messageNum%100)
+                else -> String.format("%d", messageNum%100)
+            }
+
+            // TODO: use string resource template instead
+            val outString = String.format("$%d.%s", messageNum/100, second)
+            transfer.text = outString
         }
-        val outString = String.format("$%d.%s", messageNum/100, second)
 
-        val amountView = view?.findViewById<TextView>(R.id.transfer)
-        amountView?.text = outString
-
-        builder.setView(view)
-                .setPositiveButton(R.string.dialog_acknowledge, DialogInterface.OnClickListener { dialog, id -> run {
-                    System.out.println("Test")
-                    System.out.println("Test2")
-                }
-                })
+        builder.setView(view).setPositiveButton(R.string.dialog_acknowledge) { dialog, id -> }
 
         return builder.create()
     }

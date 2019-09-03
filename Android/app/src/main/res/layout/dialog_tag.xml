@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -10,8 +11,11 @@
         android:layout_height="wrap_content"
         android:text="Transaction Completed!"
         android:textSize="24sp"
-        android:layout_margin="12dp"
-        android:layout_centerHorizontal="true"/>
+        android:padding="12dp"
+        android:layout_centerHorizontal="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <TextView
         android:id="@+id/date"
@@ -19,9 +23,11 @@
         android:layout_height="wrap_content"
         android:text="April 5, 2018"
         android:textSize="20sp"
-        android:layout_margin="7dp"
+        android:padding="7dp"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/title" />
+        app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <TextView
         android:id="@+id/tnum"
@@ -29,9 +35,11 @@
         android:layout_height="wrap_content"
         android:text="Transaction: 1032"
         android:textSize="20sp"
-        android:layout_marginTop="12dp"
+        android:padding="12dp"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/date" />
+        app:layout_constraintTop_toBottomOf="@id/date"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/transfer"
@@ -39,8 +47,10 @@
         android:layout_height="wrap_content"
         android:text="$5.55"
         android:textSize="20sp"
-        android:layout_margin="7dp"
+        android:padding="7dp"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/tnum"/>
+        app:layout_constraintTop_toBottomOf="@id/tnum"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
