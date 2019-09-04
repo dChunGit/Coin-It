@@ -13,12 +13,12 @@ import java.io.IOException
 import java.nio.charset.Charset
 import java.util.*
 
-class NdefWriter(context: TransactionInterface, data: String): AsyncTask<Tag, Void, Int>() {
+class NdefWriter(context: TransactionInterface, data: String): AsyncTask<Tag, Void, Boolean>() {
     private var mContext = context
     private var mData = data
 
-    override fun doInBackground(vararg p0: Tag?): Int {
-        Log.d("DEBUG", "WRITING $mData")
+    override fun doInBackground(vararg p0: Tag?): Boolean {
+        Log.d(NDEF_TAG, "Writing $mData")
         val tag = p0[0] as Tag
         val content = mData.toByteArray(Charset.forName("UTF-8"))
         val lang = Locale.getDefault().language.toByteArray(Charset.forName("UTF-8"))
@@ -32,60 +32,50 @@ class NdefWriter(context: TransactionInterface, data: String): AsyncTask<Tag, Vo
             write(content, 0, contentSize)
         }
 
-        val ndefRecord = NdefRecord(NdefRecord.TNF_WELL_KNOWN,  //Our 3-bit Type name format
-                NdefRecord.RTD_TEXT,        //Description of our payload
-                ByteArray(0),                //T
+        val ndefRecord = NdefRecord(NdefRecord.TNF_WELL_KNOWN, NdefRecord.RTD_TEXT,
+                ByteArray(0),
                 payload.toByteArray())
         val nfcMessage = NdefMessage(arrayOf(ndefRecord))
 
-        try {
-            val nDef = Ndef.get(tag)
+        val nDef = Ndef.get(tag)
 
-            nDef?.let {
-                nDef.connect()
-                if (nDef.maxSize < nfcMessage.toByteArray().size) {
-                    //Message too large to write to NFC tag
-                    return 0
-                }
-
-                return when(nDef.isWritable) {
-                    true -> {
-                        nDef.writeNdefMessage(nfcMessage)
-                        nDef.close()
-                        //Message is written to tag
-                        1
-                    }
-                    false -> 0
-                }
+        nDef?.let {
+            nDef.connect()
+            if (nDef.maxSize < nfcMessage.toByteArray().size) {
+                //Message too large to write to NFC tag
+                return false
             }
 
-            val nDefFormatableTag = NdefFormatable.get(tag)
-
-            nDefFormatableTag.apply {
-                return try {
-                    connect()
-                    format(nfcMessage)
-                    close()
-                    //The data is written to the tag
-                    1
-                } catch (e: IOException) {
-                    //Failed to format tag or Ndef not supported
-                    Log.d("DEBUG", "Not format")
-                    0
-                }
+            return if(nDef.isWritable) {
+                nDef.writeNdefMessage(nfcMessage)
+                nDef.close()
+                //Message is written to tag
+                true
+            } else {
+                false
             }
-
-        } catch (e: Exception) {
-            //Write operation has failed
-            e.printStackTrace()
         }
 
-        return 0
+        val nDefFormatableTag = NdefFormatable.get(tag)
+
+        nDefFormatableTag.apply {
+            return try {
+                connect()
+                format(nfcMessage)
+                close()
+                //The data is written to the tag
+                true
+            } catch (e: IOException) {
+                Log.d(NDEF_TAG, "Ndef not formatted or not supported")
+                false
+            }
+        }
     }
 
-    override fun onPostExecute(result: Int?) {
-        requireNotNull(result)
-        mContext.messageWritten(result)
+    override fun onPostExecute(result: Boolean) = mContext.messageWritten(result)
+
+    companion object {
+        const val NDEF_TAG = "NDEF"
     }
 
 }

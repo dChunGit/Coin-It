@@ -7,6 +7,9 @@ import android.content.Context
 
 import com.commonsware.cwac.saferoom.SafeHelperFactory
 
+/**
+ * Very simple db implementation
+ */
 @Database(entities = [Transaction::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun transactionDao(): TransactionDao

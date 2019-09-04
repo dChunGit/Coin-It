@@ -26,18 +26,22 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 
 /**
+ * Quick sample client for Coin-It embedded nfc wireless credit
  * TODO: Move strings to constants
  * TODO: Rx for database reports and nfc reads
  * TODO: Replace asynctask with coroutines for async
+ * TODO: Inject db
+ * TODO: Abstract current state and cache values
  */
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, TransactionInterface {
-    private var state = 0 //state 0 -> write connected, state 1 -> read amount -> write done
+    private var state = NFCState.CONNECTED //state 0 -> write connected, state 1 -> read amount -> write done
     private lateinit var tag: Tag
     private var message = "Confirmed:David"
     private var error = 0
     private var currentTotal = 0
     private var currentTransaction = 0
     private var read = false
+    private val moneyFormat = "$%d.%d"
 
     private lateinit var database: AppDatabase
     private lateinit var databaseValues: List<Transaction>
@@ -60,7 +64,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-        error = 0
 
         val toggle = ActionBarDrawerToggle(this, drawer_layout, toolbar,
                 R.string.navigation_drawer_open,
@@ -81,24 +84,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
-
         outState?.apply {
-            putInt("State", state)
+            putSerializable("State", state)
             putInt("Error", error)
         }
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
         super.onRestoreInstanceState(savedInstanceState)
-
         savedInstanceState?.apply {
-            if(getInt("Error", 0) < 3) {
-                state = getInt("State",
-                        0)
+            if (getInt("Error", 0) < 3) {
+                state = getSerializable("State") as NFCState
                 message = when (state) {
-                    0 -> "Done"
-                    1 -> "Confirmed:David"
-                    else -> "Error"
+                    NFCState.CONNECTED -> "Done"
+                    NFCState.COMPLETE -> "Confirmed:David"
                 }
             }
         }
@@ -133,18 +132,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun handleIntent(intent: Intent) {
         val action = intent.action
-        if(NfcAdapter.ACTION_NDEF_DISCOVERED == action) {
-            if(mimeText == intent.type) {
+        if (NfcAdapter.ACTION_NDEF_DISCOVERED == action) {
+            if (mimeText == intent.type) {
                 tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG)
-                Log.d("TAG", "Current State: $state")
-                when(state) {
-                    0 -> NdefWriter(this, message).execute(tag)
-                    1 -> NdefReader(this).execute(tag)
-                    else -> Log.d("TAG", "Invalid State")
+                Log.d(LOG_TAG, "Current State: $state")
+                when (state) {
+                    NFCState.CONNECTED -> NdefWriter(this, message).execute(tag)
+                    NFCState.COMPLETE -> NdefReader(this).execute(tag)
                 }
 
             } else {
-                Log.d("TAG", "Wrong mime: " + intent.type)
+                Log.d(LOG_TAG, "Wrong mime: " + intent.type)
             }
         }
     }
@@ -183,53 +181,55 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         databaseValues = transactions
     }
 
-    override fun messageWritten(success: Int) {
-        when(success) {
-            0 -> {
-                Log.d("TAG", "Message Write Failed")
-                error++
-                if(error < 3) {
-                    NdefWriter(this, message).execute(tag)
-                } else Log.d("TAG", "Error out")
-            }
-            1 -> {
-                when(state) {
-                    0 -> {
-                        message = "Done"
-                        state = 1
-                    }
-                    1 -> {
-                        message = "Confirmed:David"
-                        state = 0
-                        read = false
-
-                    }
+    override fun messageWritten(success: Boolean) {
+        if (success) {
+            when (state) {
+                NFCState.CONNECTED -> {
+                    message = "Done"
+                    state = NFCState.COMPLETE
                 }
-                Log.d("TAG", "STATE Change $state")
+                NFCState.COMPLETE -> {
+                    message = "Confirmed:David"
+                    state = NFCState.CONNECTED
+                    read = false
+                }
             }
+            Log.d(LOG_TAG, "State change $state")
+        } else {
+            Log.d(LOG_TAG, "Message Write Failed")
+            error++
+            if (error < 3) { NdefWriter(this, message).execute(tag) } else Log.d(LOG_TAG, "Retries failed")
         }
     }
 
     override fun relayMessage(data: String) {
-        if(!data.contains("Confirmed") && data != "Done" && !read) {
+        if (!data.contains("Confirmed") && data != "Done" && !read) {
             read = true
             currentTransaction++
             AsyncStore(database).execute(data)
             data.toInt().let {
                 currentTotal += it
-                val newMessage = String.format("$%d.%d", it/100, it%100)
-                val balMessage = String.format("$%d.%d", currentTotal/100, currentTotal%100)
-                lastNum.text = newMessage
-                currentBal.text = balMessage
+                lastNum.text = moneyFormat.formatMoney(it)
+                currentBal.text = moneyFormat.formatMoney(currentTotal)
 
                 NdefWriter(this, message).execute(tag)
                 val transactionFragment = TransactionFragment.newInstance(it)
-                transactionFragment.show(supportFragmentManager, "TransactionDialog")
-                Log.d("TAG", "State Change $state $message")
+                transactionFragment.show(supportFragmentManager, TRANSACTION_TAG)
+                Log.d(LOG_TAG, "State Change $state $message")
             }
         } else {
             NdefReader(this).execute(tag)
         }
+    }
 
+    private fun String.formatMoney(value: Int) = format(this, value/100, value%100)
+
+    enum class NFCState() {
+        CONNECTED, COMPLETE
+    }
+    
+    companion object {
+        const val LOG_TAG = "TAG"
+        const val TRANSACTION_TAG = "TransactionDialog"
     }
 }

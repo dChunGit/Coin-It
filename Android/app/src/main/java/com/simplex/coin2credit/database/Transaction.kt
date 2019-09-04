@@ -4,6 +4,9 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
+/**
+ * Model for nfc transactions to store amount transferred
+ */
 @Entity(tableName = "transactionDB")
 class Transaction {
     @PrimaryKey(autoGenerate = true)

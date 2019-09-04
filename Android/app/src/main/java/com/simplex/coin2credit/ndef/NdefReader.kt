@@ -24,17 +24,16 @@ class NdefReader(context: TransactionInterface): AsyncTask<Tag, Void, String>() 
         return ""
     }
 
-    private fun readText(record: NdefRecord): String = record.payload.let { payload ->
-            val textEncoding = if (payload[0] and 128.toByte() == 0.toByte()) "UTF-8" else "UTF-16"
-            val languageCodeLength = payload[0] and 63.toByte()
-
-            return String(payload, languageCodeLength + 1,
-                    payload.size - 1 - languageCodeLength, Charset.forName(textEncoding))
-        }
-
     override fun onPostExecute(result: String?) {
         requireNotNull(result)
         mContext.relayMessage(result)
     }
 
+    private fun readText(record: NdefRecord): String = record.payload.let { payload ->
+            val textEncoding = if (payload[0] and 128.toByte() == 0.toByte()) "UTF-8" else "UTF-16"
+            val languageCodeLength = payload[0] and 63.toByte()
+
+            return@let String(payload, languageCodeLength + 1,
+                    payload.size - 1 - languageCodeLength, Charset.forName(textEncoding))
+        }
 }
